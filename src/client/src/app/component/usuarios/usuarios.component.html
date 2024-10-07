@@ -1,0 +1,70 @@
+<div class="container">
+    <h2>Gestión de Usuarios</h2>
+  
+    <!-- Formulario para agregar/editar usuario -->
+    <form (ngSubmit)="onSubmit($event)">
+      <div class="form-group">
+        <label for="nombre">Nombre:</label>
+        <input type="text" id="nombre" [(ngModel)]="nombre" name="nombre" class="form-control" required>
+      </div>
+  
+      <div class="form-group">
+        <label for="correoElectronico">Correo Electrónico:</label>
+        <input type="email" id="correoElectronico" [(ngModel)]="correoElectronico" name="correoElectronico" class="form-control" required>
+      </div>
+  
+      <div class="form-group">
+        <label for="telefono">Teléfono:</label>
+        <input type="text" id="telefono" [(ngModel)]="telefono" name="telefono" class="form-control" required>
+      </div>
+  
+      <div class="form-group">
+        <label for="direccion">Dirección:</label>
+        <input type="text" id="direccion" [(ngModel)]="direccion" name="direccion" class="form-control" required>
+      </div>
+  
+      <div class="form-group">
+        <label for="rol">Rol:</label>
+        <input type="text" id="rol" [(ngModel)]="rol" name="rol" class="form-control" required>
+      </div>
+  
+      <div class="form-group">
+        <label for="fechaRegistro">Fecha de Registro:</label>
+        <input type="date" id="fechaRegistro" [(ngModel)]="fechaRegistro" name="fechaRegistro" class="form-control" required>
+      </div>
+  
+      <button type="submit" class="btn btn-primary">
+        {{ usuarioSeleccionado ? 'Actualizar' : 'Agregar' }} Usuario
+      </button>
+    </form>
+  
+    <!-- Tabla de usuarios -->
+    <table class="table table-striped mt-4">
+      <thead>
+        <tr>
+          <th>Nombre</th>
+          <th>Correo Electrónico</th>
+          <th>Teléfono</th>
+          <th>Dirección</th>
+          <th>Rol</th>
+          <th>Fecha Registro</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let usuario of usuarios">
+          <td>{{ usuario.nombre }}</td>
+          <td>{{ usuario.correoElectronico }}</td>
+          <td>{{ usuario.telefono }}</td>
+          <td>{{ usuario.direccion }}</td>
+          <td>{{ usuario.rol }}</td>
+          <td>{{ usuario.fechaRegistro | date }}</td>
+          <td>
+            <button class="btn btn-warning btn-sm" (click)="editarUsuario(usuario)">Editar</button>
+            <button class="btn btn-danger btn-sm" (click)="borrarUsuario(usuario)">Eliminar</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  
