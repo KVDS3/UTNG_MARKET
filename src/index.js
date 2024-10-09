@@ -5,6 +5,7 @@ const app = express();
 
 //const indexRoutes = require('./routes/index');
 const usuariosRoutes = require('./routes/usuarios');
+const productosRoutes = require('../routes/productos');
 
 
 // configuracion
@@ -21,6 +22,7 @@ app.use(express.urlencoded({extended: false}));
 // router
 //app.use(indexRoutes);
 app.use('/api', usuariosRoutes);
+app.use('/api', productosRoutes);
 
 //Statics files
 app.use(express.static(path.join(__dirname, 'dist')));
