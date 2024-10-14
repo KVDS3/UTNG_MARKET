@@ -8,6 +8,7 @@ import { AppComponent } from './app.component';
 import { HomeComponent } from './component/home/home.component';
 import { UsuariosComponent } from './component/usuarios/usuarios.component';
 import { CarritoComponent } from './component/carrito/carrito.component';
+import { AgreProductoComponent } from './component/agre-producto/agre-producto.component';
 
 @NgModule({
   declarations: [
@@ -15,6 +16,7 @@ import { CarritoComponent } from './component/carrito/carrito.component';
     HomeComponent,
     UsuariosComponent,
     AppComponent,
+    AgreProductoComponent,
     
     
   ],

@@ -2,6 +2,11 @@ const router = require('express').Router();
 const mongojs = require('mongojs');
 const db = mongojs('127.0.0.1/utngMarket', ['productos']); // Cambia el nombre de la colección a 'productos'
 
+// Validación del ObjectId
+function isValidObjectId(id) {
+    return mongojs.ObjectId.isValid(id) && id.length === 24;
+}
+
 // Obtener todos los productos
 router.get('/productos', (req, res, next) => {
     db.productos.find((err, productos) => {
@@ -12,7 +17,13 @@ router.get('/productos', (req, res, next) => {
 
 // Obtener un solo producto por ID
 router.get('/productos/:id', (req, res, next) => {
-    db.productos.findOne({_id: mongojs.ObjectId(req.params.id)}, (err, producto) => {
+    const id = req.params.id;
+    
+    if (!isValidObjectId(id)) {
+        return res.status(400).json({ error: 'Invalid ID' });
+    }
+
+    db.productos.findOne({ _id: mongojs.ObjectId(id) }, (err, producto) => {
         if (err) return next(err);
         res.json(producto);
     });
@@ -21,10 +32,9 @@ router.get('/productos/:id', (req, res, next) => {
 // Agregar un nuevo producto
 router.post('/productos', (req, res, next) => {
     const producto = {
-        id_producto: req.body.id_producto,
         id_vendedor: req.body.id_vendedor,
         nombre_producto: req.body.nombre_producto,
-        cantidad_disponible: req.body.cantidad_disponible,
+        cantidad_dispo: req.body.cantidad_dispo,
         categoria: req.body.categoria,
         precio: req.body.precio,
         fecha_publi: req.body.fecha_publi,
@@ -39,7 +49,13 @@ router.post('/productos', (req, res, next) => {
 
 // Eliminar un producto por ID
 router.delete('/productos/:id', (req, res, next) => {
-    db.productos.remove({_id: mongojs.ObjectId(req.params.id)}, (err, result) => {
+    const id = req.params.id;
+
+    if (!isValidObjectId(id)) {
+        return res.status(400).json({ error: 'Invalid ID' });
+    }
+
+    db.productos.remove({ _id: mongojs.ObjectId(id) }, (err, result) => {
         if (err) return next(err);
         res.json(result);
     });
@@ -47,15 +63,21 @@ router.delete('/productos/:id', (req, res, next) => {
 
 // Actualizar un producto por ID
 router.put('/productos/:id', (req, res, next) => {
+    const id = req.params.id;
     const producto = req.body;
     const updateProducto = {};
+
+    // Validar que el ID sea correcto
+    if (!isValidObjectId(id)) {
+        return res.status(400).json({ error: 'Invalid ID' });
+    }
 
     // Solo se actualizan los campos que vienen en el cuerpo de la petición
     if (producto.nombre_producto) {
         updateProducto.nombre_producto = producto.nombre_producto;
     }
-    if (producto.cantidad_disponible) {
-        updateProducto.cantidad_disponible = producto.cantidad_disponible;
+    if (producto.cantidad_dispo) {
+        updateProducto.cantidad_dispo = producto.cantidad_dispo;
     }
     if (producto.categoria) {
         updateProducto.categoria = producto.categoria;
@@ -73,7 +95,7 @@ router.put('/productos/:id', (req, res, next) => {
     if (Object.keys(updateProducto).length === 0) {
         return res.status(400).json({ error: 'Bad Request' });
     } else {
-        db.productos.update({_id: mongojs.ObjectId(req.params.id)}, {$set: updateProducto}, (err, result) => {
+        db.productos.update({ _id: mongojs.ObjectId(id) }, { $set: updateProducto }, (err, result) => {
             if (err) return next(err);
             res.json(result);
         });
