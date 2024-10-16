@@ -44,18 +44,21 @@
           <th>Acciones</th>
         </tr>
       </thead>
-      <tbody>
-        <tr *ngFor="let producto of productos">
-          <td>{{ producto.nombre_producto }}</td>
-          <td>{{ producto.cantidad_dispo }}</td>
-          <td>{{ producto.precio }}</td>
-          <td>{{ producto.descripcion }}</td>
-          <td>{{ producto.categoria }}</td>
-          <td>
-            <button (click)="editarProducto(producto)">Editar</button>
-            <button (click)="eliminarProducto(producto._id)">Eliminar</button>
-          </td>
-        </tr>
-      </tbody>
+      <!-- En tu template agre-producto.component.html -->
+<tbody>
+  <tr *ngFor="let producto of productos">
+    <td>{{ producto.nombre_producto }}</td>
+    <td>{{ producto.cantidad_dispo }}</td>
+    <td>{{ producto.precio }}</td>
+    <td>{{ producto.descripcion }}</td>
+    <td>{{ producto.categoria }}</td>
+    <td>
+      <button (click)="editarProducto(producto)">Editar</button>
+      <button (click)="eliminarProducto(producto._id)">Eliminar</button>
+      <button (click)="agregarAlCarrito(producto)">Agregar al Carrito</button>
+    </td>
+  </tr>
+</tbody>
+
     </table>
   </div>
