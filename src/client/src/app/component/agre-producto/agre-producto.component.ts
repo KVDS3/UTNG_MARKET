@@ -27,6 +27,11 @@ export class AgreProductoComponent implements OnInit {
   }
 
   onSubmit(): void {
+    if (!this.editando) {
+      // Establecer la fecha de publicación al crear un producto
+      this.producto.fecha_publicacion = new Date();
+    }
+  
     if (this.editando) {
       this.productosService.updateProducto(this.producto).subscribe(() => {
         this.listarProductos();
@@ -39,6 +44,7 @@ export class AgreProductoComponent implements OnInit {
       });
     }
   }
+  
 
   editarProducto(producto: Productos): void {
     this.producto = { ...producto };

@@ -37,7 +37,7 @@ router.post('/productos', (req, res, next) => {
         cantidad_dispo: req.body.cantidad_dispo,
         categoria: req.body.categoria,
         precio: req.body.precio,
-        fecha_publi: req.body.fecha_publi,
+        fecha_publicacion: req.body.fecha_publicacion,
         descripcion: req.body.descripcion
     };
     
@@ -86,7 +86,7 @@ router.put('/productos/:id', (req, res, next) => {
         updateProducto.precio = producto.precio;
     }
     if (producto.fecha_publi) {
-        updateProducto.fecha_publi = producto.fecha_publi;
+        updateProducto.fecha_publicacion = producto.fecha_publicacion;
     }
     if (producto.descripcion) {
         updateProducto.descripcion = producto.descripcion;
