@@ -12,8 +12,8 @@ export class ProductosService {
   constructor(private http: HttpClient) {}
 
   // Eliminar un producto por _id
-  deleteProducto(_id: string): Observable<void> {
-    return this.http.delete<void>(`${this.apiUrl}/${_id}`);
+  deleteProducto(id: string): Observable<any> {
+    return this.http.delete(`${this.apiUrl}/${id}`);
   }
 
   // Obtener todos los productos
@@ -21,13 +21,17 @@ export class ProductosService {
     return this.http.get<Productos[]>(this.apiUrl);
   }
 
-  // Crear un nuevo producto
-  createProducto(producto: Productos): Observable<Productos> {
-    return this.http.post<Productos>(this.apiUrl, producto);
+  // Crear un nuevo producto con imagen
+  createProducto(formData: FormData): Observable<any> {
+    return this.http.post(this.apiUrl, formData); // Ruta corregida, solo usa apiUrl
   }
 
-  // Actualizar un producto existente
-  updateProducto(producto: Productos): Observable<Productos> {
-    return this.http.put<Productos>(`${this.apiUrl}/${producto._id}`, producto); // Usamos _id en lugar de id_producto
+  // Actualizar un producto existente con imagen
+  updateProducto(id: string, formData: FormData): Observable<any> {
+    return this.http.put(`${this.apiUrl}/${id}`, formData, {
+      headers: {
+        // No establecer 'Content-Type', el navegador lo maneja automáticamente.
+      },
+    });
   }
 }

@@ -1,18 +1,19 @@
 import { Component, OnInit } from '@angular/core';
 import { ProductosService } from '../../services/agre-producto.service';
-import { CarritoService } from '../../services/carrito.service'; // Importa tu nuevo servicio
+import { CarritoService } from '../../services/carrito.service';
 import { Productos } from '../../models/productos';
-import { Carrito } from '../../models/carrito'; // Modelo de carrito
+import { Carrito } from '../../models/carrito';
 
 @Component({
   selector: 'app-agre-producto',
   templateUrl: './agre-producto.component.html',
-  styleUrls: ['./agre-producto.component.css'] // Corrige 'styleUrl' a 'styleUrls'
+  styleUrls: ['./agre-producto.component.css']
 })
 export class AgreProductoComponent implements OnInit {
   productos: Productos[] = [];
-  producto: Productos = new Productos('', '', 0, 0, '', new Date(), '');
+  producto: Productos = new Productos('', '', 0, 0, '', new Date(), '', null);
   editando: boolean = false;
+  imagenSeleccionada: File | null = null; // Nueva variable para el archivo
 
   constructor(private productosService: ProductosService, private carritoService: CarritoService) {}
 
@@ -26,64 +27,90 @@ export class AgreProductoComponent implements OnInit {
     });
   }
 
+  onFileSelected(event: any): void {
+    const file: File = event.target.files[0];
+    if (file) {
+      this.imagenSeleccionada = file;  // Guardar el archivo en una variable separada
+    }
+  }
+
   onSubmit(): void {
-    if (!this.editando) {
-      // Establecer la fecha de publicación al crear un producto
-      this.producto.fecha_publicacion = new Date();
+    const formData = new FormData();
+    formData.append('id_vendedor', this.producto.id_vendedor);
+    formData.append('nombre_producto', this.producto.nombre_producto);
+    formData.append('cantidad_dispo', this.producto.cantidad_dispo.toString());
+    formData.append('precio', this.producto.precio.toString());
+    formData.append('descripcion', this.producto.descripcion);
+    formData.append('fecha_publicacion', this.producto.fecha_publicacion.toISOString());
+    formData.append('categoria', this.producto.categoria);
+    
+    if (this.imagenSeleccionada) {
+      formData.append('imagen', this.imagenSeleccionada);  // Enviar el archivo seleccionado
     }
   
     if (this.editando) {
-      this.productosService.updateProducto(this.producto).subscribe(() => {
+      this.productosService.updateProducto(this.producto._id!, formData).subscribe((response) => {
+        this.producto.imagen = response.productoData.imagen;  // Guardar la URL devuelta
         this.listarProductos();
         this.resetForm();
       });
     } else {
-      this.productosService.createProducto(this.producto).subscribe(() => {
+      this.productosService.createProducto(formData).subscribe((response) => {
+        this.producto.imagen = response.productoData.imagen;  // Guardar la URL devuelta
         this.listarProductos();
         this.resetForm();
       });
     }
   }
-  
 
   editarProducto(producto: Productos): void {
     this.producto = { ...producto };
     this.editando = true;
   }
 
-  eliminarProducto(_id: string | undefined): void {
-    this.productosService.deleteProducto(_id!).subscribe(() => {
-      this.listarProductos();
-    });
+  eliminarProducto(id: string | undefined): void {
+    if (id) { // Asegurarse de que el id está definido
+      this.productosService.deleteProducto(id).subscribe({
+        next: () => {
+          console.log('Producto eliminado correctamente');
+          this.listarProductos(); // Actualizar la lista después de eliminar
+        },
+        error: (err) => {
+          console.error('Error al eliminar el producto', err);
+        }
+      });
+    } else {
+      console.error('No se puede eliminar el producto: ID no está definido');
+    }
   }
 
   resetForm(): void {
-    this.producto = new Productos('', '', 0, 0, '', new Date(), '');
+    this.producto = new Productos('', '', 0, 0, '', new Date(), '', null);
+    this.imagenSeleccionada = null;
     this.editando = false;
   }
 
   agregarAlCarrito(producto: Productos): void {
     const carritoItem = {
-        id_usuario: 'usuario123', // Cambia esto por el ID del usuario real
-        id_producto: producto._id,
-        id_vendedor: producto.id_vendedor,
-        nombre_producto: producto.nombre_producto,
-        cantidad_dispo: producto.cantidad_dispo,
-        precio: producto.precio,
-        descripcion: producto.descripcion,
-        fecha_publicacion: producto.fecha_publicacion,
-        categoria: producto.categoria
+      id_usuario: 'usuario123',
+      id_producto: producto._id,
+      id_vendedor: producto.id_vendedor,
+      nombre_producto: producto.nombre_producto,
+      cantidad_dispo: producto.cantidad_dispo,
+      precio: producto.precio,
+      descripcion: producto.descripcion,
+      fecha_publicacion: producto.fecha_publicacion,
+      categoria: producto.categoria,
+      imagen: this.imagenSeleccionada ? this.imagenSeleccionada.name : producto.imagen  // Usar el nombre del archivo o la URL
     };
 
     this.carritoService.addToCarrito(carritoItem).subscribe(
-        (response) => {
-            console.log('Producto agregado al carrito', response);
-            // Aquí puedes agregar un mensaje de éxito o lógica adicional
-        },
-        (error) => {
-            console.error('Error al agregar al carrito', error);
-            // Manejo de errores
-        }
+      (response) => {
+        console.log('Producto agregado al carrito', response);
+      },
+      (error) => {
+        console.error('Error al agregar al carrito', error);
+      }
     );
-}
+  }
 }

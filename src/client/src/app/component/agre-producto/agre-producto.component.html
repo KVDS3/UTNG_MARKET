@@ -28,6 +28,10 @@
         <input id="categoria" [(ngModel)]="producto.categoria" name="categoria" required />
       </div>
       <div>
+        <label for="imagen">Imagen del producto:</label>
+        <input id="imagen" type="file" (change)="onFileSelected($event)" />
+      </div>
+      <div>
         <button type="submit">{{ editando ? 'Actualizar' : 'Agregar' }} producto</button>
       </div>
     </form>
@@ -36,6 +40,7 @@
     <table>
       <thead>
         <tr>
+          <th>Imagen</th> <!-- Nueva columna para la imagen -->
           <th>Nombre</th>
           <th>Cantidad</th>
           <th>Precio</th>
@@ -44,21 +49,24 @@
           <th>Acciones</th>
         </tr>
       </thead>
-      <!-- En tu template agre-producto.component.html -->
-<tbody>
-  <tr *ngFor="let producto of productos">
-    <td>{{ producto.nombre_producto }}</td>
-    <td>{{ producto.cantidad_dispo }}</td>
-    <td>{{ producto.precio }}</td>
-    <td>{{ producto.descripcion }}</td>
-    <td>{{ producto.categoria }}</td>
-    <td>
-      <button (click)="editarProducto(producto)">Editar</button>
-      <button (click)="eliminarProducto(producto._id)">Eliminar</button>
-      <button (click)="agregarAlCarrito(producto)">Agregar al Carrito</button>
-    </td>
-  </tr>
-</tbody>
-
+      <tbody>
+        <tr *ngFor="let producto of productos">
+          <td>
+  <img *ngIf="producto.imagen" [src]="producto.imagen" alt="{{ producto.nombre_producto }}" />
+          </td>
+          <td>{{ producto.nombre_producto }}</td>
+          <td>{{ producto.cantidad_dispo }}</td>
+          <td>{{ producto.precio }}</td>
+          <td>{{ producto.descripcion }}</td>
+          <td>{{ producto.categoria }}</td>
+          <td>
+            <button (click)="editarProducto(producto)">Editar</button>
+            <button (click)="eliminarProducto(producto._id)">Eliminar</button>
+            <button (click)="agregarAlCarrito(producto)">Agregar al Carrito</button>
+          </td>
+        </tr>
+      </tbody>
     </table>
+    <img *ngIf="producto.imagen" [src]="producto.imagen" alt="{{ producto.nombre_producto }}" class="imagen-producto" />
+    
   </div>

@@ -1,5 +1,5 @@
 export class Productos {
-  _id?: string; // Se genera automáticamente en MongoDB
+  _id?: string;
   id_vendedor: string;
   nombre_producto: string;
   cantidad_dispo: number;
@@ -7,6 +7,7 @@ export class Productos {
   descripcion: string;
   fecha_publicacion: Date;
   categoria: string;
+  imagen?: string | null; // La imagen es una cadena (la URL del archivo)
 
   constructor(
     id_vendedor: string,
@@ -14,8 +15,9 @@ export class Productos {
     cantidad_dispo: number,
     precio: number,
     descripcion: string,
-    fecha_publicacion: Date = new Date(), // Asignar fecha actual si no se proporciona
-    categoria: string
+    fecha_publicacion: Date,
+    categoria: string,
+    imagen?: string | null // Acepta una cadena o null
   ) {
     this.id_vendedor = id_vendedor;
     this.nombre_producto = nombre_producto;
@@ -24,5 +26,6 @@ export class Productos {
     this.descripcion = descripcion;
     this.fecha_publicacion = fecha_publicacion;
     this.categoria = categoria;
+    this.imagen = imagen || null; // Inicializar con null si no se pasa
   }
 }
