@@ -15,6 +15,7 @@ export class UsuariosComponent implements OnInit {
   rol: string = '';
   fechaRegistro: string = ''; // Lo manejaremos como string para el formulario
   usuarioSeleccionado: Usuarios | null = null;
+  userType='student';
 
   // Almacenar la lista de usuarios
   usuarios: Usuarios[] = [];
