@@ -7,7 +7,6 @@ export class Productos {
   descripcion: string;
   fecha_publicacion: Date;
   categoria: string;
-  imagen?: string | null; // La imagen es una cadena (la URL del archivo)
 
   constructor(
     id_vendedor: string,
@@ -17,7 +16,6 @@ export class Productos {
     descripcion: string,
     fecha_publicacion: Date,
     categoria: string,
-    imagen?: string | null // Acepta una cadena o null
   ) {
     this.id_vendedor = id_vendedor;
     this.nombre_producto = nombre_producto;
@@ -26,6 +24,5 @@ export class Productos {
     this.descripcion = descripcion;
     this.fecha_publicacion = fecha_publicacion;
     this.categoria = categoria;
-    this.imagen = imagen || null; // Inicializar con null si no se pasa
   }
 }

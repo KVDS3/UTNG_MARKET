@@ -113,10 +113,3 @@ td button:nth-child(3) {
 td button:nth-child(3):hover {
     background-color: #e0a800;
 }
-/* Estilo para las imágenes de los productos en la tabla */
-.imagen-producto {
-    width: 50px;  /* Ajusta el ancho según lo necesites */
-    height: auto; /* Mantiene la relación de aspecto */
-    border-radius: 4px; /* Bordes redondeados */
-    object-fit: cover; /* Cubre el área de la celda */
-}

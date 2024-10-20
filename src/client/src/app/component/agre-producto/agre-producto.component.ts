@@ -11,9 +11,9 @@ import { Carrito } from '../../models/carrito';
 })
 export class AgreProductoComponent implements OnInit {
   productos: Productos[] = [];
-  producto: Productos = new Productos('', '', 0, 0, '', new Date(), '', null);
+  producto: Productos = new Productos('', '', 0, 0, '', new Date(), '',  );
   editando: boolean = false;
-  imagenSeleccionada: File | null = null; // Nueva variable para el archivo
+  selectedFile: File | null = null;
 
   constructor(private productosService: ProductosService, private carritoService: CarritoService) {}
 
@@ -26,13 +26,7 @@ export class AgreProductoComponent implements OnInit {
       this.productos = data;
     });
   }
-
-  onFileSelected(event: any): void {
-    const file: File = event.target.files[0];
-    if (file) {
-      this.imagenSeleccionada = file;  // Guardar el archivo en una variable separada
-    }
-  }
+ 
 
   onSubmit(): void {
     const formData = new FormData();
@@ -43,25 +37,13 @@ export class AgreProductoComponent implements OnInit {
     formData.append('descripcion', this.producto.descripcion);
     formData.append('fecha_publicacion', this.producto.fecha_publicacion.toISOString());
     formData.append('categoria', this.producto.categoria);
-    
-    if (this.imagenSeleccionada) {
-      formData.append('imagen', this.imagenSeleccionada);  // Enviar el archivo seleccionado
-    }
-  
-    if (this.editando) {
-      this.productosService.updateProducto(this.producto._id!, formData).subscribe((response) => {
-        this.producto.imagen = response.productoData.imagen;  // Guardar la URL devuelta
-        this.listarProductos();
-        this.resetForm();
-      });
-    } else {
-      this.productosService.createProducto(formData).subscribe((response) => {
-        this.producto.imagen = response.productoData.imagen;  // Guardar la URL devuelta
-        this.listarProductos();
-        this.resetForm();
-      });
-    }
+
+    this.productosService.createProducto(formData).subscribe(response => {
+      console.log('Producto agregado', response);
+      // Resetear el formulario si es necesario
+    });
   }
+ 
 
   editarProducto(producto: Productos): void {
     this.producto = { ...producto };
@@ -86,7 +68,6 @@ export class AgreProductoComponent implements OnInit {
 
   resetForm(): void {
     this.producto = new Productos('', '', 0, 0, '', new Date(), '', null);
-    this.imagenSeleccionada = null;
     this.editando = false;
   }
 
@@ -101,7 +82,6 @@ export class AgreProductoComponent implements OnInit {
       descripcion: producto.descripcion,
       fecha_publicacion: producto.fecha_publicacion,
       categoria: producto.categoria,
-      imagen: this.imagenSeleccionada ? this.imagenSeleccionada.name : producto.imagen  // Usar el nombre del archivo o la URL
     };
 
     this.carritoService.addToCarrito(carritoItem).subscribe(

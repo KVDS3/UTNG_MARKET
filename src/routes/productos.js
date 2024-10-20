@@ -6,7 +6,6 @@ const fs = require('fs'); // Para manejar el sistema de archivos
 const path = require('path'); // Para manejar rutas de archivos
 const db = mongojs('127.0.0.1/utngMarket', ['productos']);
 
-// Configuración de Multer para manejar las imágenes
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
         cb(null, 'uploads/'); // Carpeta donde se guardarán las imágenes
@@ -46,7 +45,7 @@ router.get('/productos/:id', (req, res, next) => {
 });
 
 router.post('/productos', upload.single('imagen'), (req, res, next) => {
-    const imagenUrl = req.file ? `http://localhost:3000/uploads/${req.file.filename}` : null; // Genera la URL completa
+    const imagenUrl = req.file ? `http://localhost:3000/uploads/${req.file.filename}` : null;
 
     const producto = {
         id_vendedor: req.body.id_vendedor,
