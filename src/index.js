@@ -7,6 +7,8 @@ const app = express();
 const usuariosRoutes = require('./routes/usuarios');
 const productosRoutes = require('./routes/productos');
 const carritoRoutes = require('./routes/carrito');
+const formasPagosRoutes = require('./routes/FormaPagos');
+
 
 
 // configuracion
@@ -29,6 +31,7 @@ app.use(express.urlencoded({extended: false}));
 app.use('/api', usuariosRoutes),
 app.use('/api', productosRoutes),
 app.use('/api', carritoRoutes),
+app.use('/api', formasPagosRoutes),
 
 
 
