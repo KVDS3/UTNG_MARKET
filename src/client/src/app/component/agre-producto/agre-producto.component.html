@@ -1,42 +1,55 @@
 <div class="container">
   <h2>Gestión de Productos</h2>
-  
+
   <form (ngSubmit)="onSubmit()" enctype="multipart/form-data">
-      <div>
-          <label for="id_vendedor">ID del Vendedor:</label>
-          <input id="id_vendedor" [(ngModel)]="producto.id_vendedor" name="id_vendedor" required />
-      </div>
-      <div>
-          <label for="nombre_producto">Nombre del producto:</label>
-          <input id="nombre_producto" [(ngModel)]="producto.nombre_producto" name="nombre_producto" required />
-      </div>
-      <div>
-          <label for="cantidad_dispo">Cantidad disponible:</label>
-          <input id="cantidad_dispo" type="number" [(ngModel)]="producto.cantidad_dispo" name="cantidad_dispo" required />
-      </div>
-      <div>
-          <label for="precio">Precio:</label>
-          <input id="precio" type="number" [(ngModel)]="producto.precio" name="precio" required />
-      </div>
-      <div>
-          <label for="descripcion">Descripción:</label>
-          <input id="descripcion" [(ngModel)]="producto.descripcion" name="descripcion" required />
-      </div>
-      <div>
-          <label for="categoria">Categoría:</label>
-          <input id="categoria" [(ngModel)]="producto.categoria" name="categoria" required />
-      </div>
-     
-      
-      <div>
-          <button type="submit">{{ editando ? 'Actualizar' : 'Agregar' }} producto</button>
-      </div>
+    <div>
+      <label for="id_vendedor">ID del Vendedor:</label>
+      <input id="id_vendedor" [(ngModel)]="producto.id_vendedor" name="id_vendedor" required />
+    </div>
+    <div>
+      <label for="nombre_producto">Nombre del producto:</label>
+      <input id="nombre_producto" [(ngModel)]="producto.nombre_producto" name="nombre_producto" required />
+    </div>
+    <div>
+      <label for="cantidad_dispo">Cantidad disponible:</label>
+      <input id="cantidad_dispo" type="number" [(ngModel)]="producto.cantidad_dispo" name="cantidad_dispo" required />
+    </div>
+    <div>
+      <label for="precio">Precio:</label>
+      <input id="precio" type="number" [(ngModel)]="producto.precio" name="precio" required />
+    </div>
+    <div>
+      <label for="descripcion">Descripción:</label>
+      <input id="descripcion" [(ngModel)]="producto.descripcion" name="descripcion" required />
+    </div>
+    <div>
+      <label for="categoria">Categoría:</label>
+      <input id="categoria" [(ngModel)]="producto.categoria" name="categoria" required />
+    </div>
+
+    <!-- Campo para seleccionar imagen -->
+    <label for="imagen">Imagen del producto:</label>
+    <input type="file" id="imagen" (change)="onFileSelected($event)" accept="image/*" />
+    
+    <!-- Vista previa de la imagen -->
+    <div *ngIf="previewUrl">
+      <img [src]="previewUrl" alt="Vista previa de la imagen" width="200" />
+    </div>
+
+    <div>
+      <button type="submit">{{ editando ? 'Actualizar' : 'Agregar' }} producto</button>
+    </div>
+    <div *ngIf="errorMessage" class="alert alert-danger">
+      {{ errorMessage }}
+    </div>
+    
   </form>
   
   <!-- Lista de productos -->
   <table>
     <thead>
       <tr>
+        <th>Imagen</th>
         <th>Nombre</th>
         <th>Cantidad</th>
         <th>Precio</th>
@@ -47,6 +60,7 @@
     </thead>
     <tbody>
       <tr *ngFor="let producto of productos">
+        <img [src]="producto.imagen_url" alt="{{ producto.nombre_producto }}" width="250" />
         <td>{{ producto.nombre_producto }}</td>
         <td>{{ producto.cantidad_dispo }}</td>
         <td>{{ producto.precio }}</td>
@@ -60,5 +74,5 @@
       </tr>
     </tbody>
   </table>
-  <img *ngIf="producto.imagen" [src]="producto.imagen" alt="{{ producto.nombre_producto }}" class="imagen-producto" />
+
 </div>

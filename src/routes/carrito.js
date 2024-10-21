@@ -32,9 +32,9 @@ router.get('/carrito/:id', (req, res, next) => {
 // Agregar un nuevo producto al carrito
 router.post('/carrito', (req, res, next) => {
     const carrito = {
-        id_usuario: req.body.id_usuario, // Asegúrate de enviar este dato
-        estado: 'activo', // Cambia este valor según tu lógica
-        fecha_creacion: new Date(), // Establecer la fecha de creación
+        id_usuario: req.body.id_usuario,
+        estado: 'activo',
+        fecha_creacion: new Date(),
         productos: [
             {
                 id_producto: req.body.id_producto,
@@ -44,7 +44,8 @@ router.post('/carrito', (req, res, next) => {
                 categoria: req.body.categoria,
                 precio: req.body.precio,
                 descripcion: req.body.descripcion,
-                fecha_publicacion: req.body.fecha_publicacion
+                fecha_publicacion: req.body.fecha_publicacion,
+                imagen: req.body.imagen // Agrega la propiedad imagen
             }
         ]
     };

@@ -10,11 +10,14 @@ const carritoRoutes = require('./routes/carrito');
 
 
 // configuracion
+const PORT = 3000;
 app.set('views', path.join(__dirname, 'views'));
 app.set('port', process.env.PORT || 3000);
 app.engine('html', require('ejs').renderFile);
 app.set('view engine', 'ejs');
-
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use('/uploads', express.static(path.join(__dirname, '../uploads')))
 // Midd
 app.use(cors());
 app.use(express.json());
@@ -28,10 +31,8 @@ app.use('/api', productosRoutes),
 app.use('/api', carritoRoutes),
 
 
-//Statics files
-app.use(express.static(path.join(__dirname, 'dist')));
 
 // start server
-app.listen(3000, () => {
-    console.log('Server on port', app.get('port'));
+app.listen(PORT, () => {
+    console.log(`Servidor en funcionamiento en http://localhost:${PORT}`);
 });

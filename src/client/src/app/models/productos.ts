@@ -7,6 +7,7 @@ export class Productos {
   descripcion: string;
   fecha_publicacion: Date;
   categoria: string;
+  imagen_url?: string;  // Añadir el campo para la URL de la imagen
 
   constructor(
     id_vendedor: string,
@@ -16,6 +17,7 @@ export class Productos {
     descripcion: string,
     fecha_publicacion: Date,
     categoria: string,
+    imagen_url?: string  // Incluir en el constructor
   ) {
     this.id_vendedor = id_vendedor;
     this.nombre_producto = nombre_producto;
@@ -24,5 +26,6 @@ export class Productos {
     this.descripcion = descripcion;
     this.fecha_publicacion = fecha_publicacion;
     this.categoria = categoria;
+    this.imagen_url = imagen_url;  // Asignar el valor
   }
 }

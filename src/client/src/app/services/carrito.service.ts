@@ -21,9 +21,8 @@ export class CarritoService {
     return this.http.delete<void>(`${this.apiUrl}/${_id}`);
   }
 
-  // Obtener todos los carritos
   getCarritos(): Observable<Carrito[]> {
-    return this.http.get<Carrito[]>(this.apiUrl);
+    return this.http.get<Carrito[]>(this.apiUrl); // Asegúrate de que esta ruta devuelva todos los carritos
   }
 
   // Crear un nuevo carrito
