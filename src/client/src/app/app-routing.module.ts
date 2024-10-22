@@ -5,6 +5,7 @@ import { HomeComponent } from './component/home/home.component';
 import { UsuariosComponent } from './component/usuarios/usuarios.component';
 import { CarritoComponent } from './component/carrito/carrito.component';
 import { AgreProductoComponent } from './component/agre-producto/agre-producto.component';
+import { FormaPagoComponent } from './component/forma-pago/forma-pago.component';
 
 const routes: Routes = [
   {
@@ -28,6 +29,10 @@ const routes: Routes = [
   {
     path : 'agre_producto',
     component : AgreProductoComponent
+  },
+  {
+    path : 'formaPagos',
+    component : FormaPagoComponent
   }
 ];
 
