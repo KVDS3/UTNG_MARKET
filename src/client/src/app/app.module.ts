@@ -10,6 +10,7 @@ import { UsuariosComponent } from './component/usuarios/usuarios.component';
 import { CarritoComponent } from './component/carrito/carrito.component';
 import { AgreProductoComponent } from './component/agre-producto/agre-producto.component';
 import { LogInComponent } from './component/log-in/log-in.component';
+import { FormaPagoComponent } from './component/forma-pago/forma-pago.component';
 
 @NgModule({
   declarations: [
@@ -19,6 +20,7 @@ import { LogInComponent } from './component/log-in/log-in.component';
     AppComponent,
     AgreProductoComponent,
     LogInComponent,
+    FormaPagoComponent,
     
     
   ],
