@@ -1,27 +1,47 @@
-const mercadopago = require('mercadopago');
+const { render } = require("ejs");
 
-// Configura las credenciales de Mercado Pago con tu access token
-mercadopago.configurations.setAccessToken('TEST-7080675336840280-102102-297746c9a853051fff5b71823a7db07f-783139872');
+const mp = new MercadoPago('TEST-a34bb4f8-e2b0-447c-8a72-e31ffa215c17',{
+    locale: "es-MX",
+});
 
-// Crear una preferencia de pago
-const crearPreferencia = (productos) => {
-    let items = productos.map(producto => ({
-        title: producto.nombre_producto,
-        unit_price: producto.precio,
-        quantity: producto.cantidad,
-    }));
+document.getElementById("chekout-btn").addEventListener("click", async () =>{
+    try {
+    const orderData = {
+        title : "producto",
+        quanty : 1,
+        price: 100,
+    }
 
-    let preference = {
-        items: items,
-        back_urls: {
-            success: "http://localhost:4200/success",
-            failure: "http://localhost:4200/failure",
-            pending: "http://localhost:4200/pending"
+    const response = await fetch("http://localhost:3000/create_preference",{
+        method: "POST",
+        headers:{
+            "Content-Type": "aplication/json",
         },
-        auto_return: "approved",
-    };
+        body: JSON.stringify(orderData),
+    });
+    const preference = await response.json()
+    createCheckoutButton(preference.id);
+    } catch(error){
+        alert("error:(")
+    }
+    
+});
 
-    return mercadopago.preferences.create(preference);
-};
+const createCheckoutButton = (preferenceId) => {
+    const bricksBuilder = mp.bricks();
+    const renderComponent = async () =>{
+        if (window.CheckoutButton) window.CheckoutButton.unmount();
 
-module.exports = { crearPreferencia };
+       await bricksBuilder.create("wallet", "wallet_container", {
+            initialization: {
+                preferenceId: preferenceId,
+            },
+         customization: {
+          texts: {
+           valueProp: 'smart_option',
+          },
+          },
+         });
+    }
+    renderComponent()
+}

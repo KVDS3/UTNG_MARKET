@@ -1,0 +1,23 @@
+<h1>Resumen de Pago</h1>
+
+<div id="payment-summary">
+    <div *ngIf="carrito?.productos?.length === 0">
+        <p>No hay productos en el carrito.</p>
+    </div>
+    
+    <div class="product-info" *ngFor="let producto of carrito?.productos">
+        <img [src]="producto.imagen" alt="Producto" width="100">
+        <div class="product-details">
+            <div class="cart-details">
+                <p>{{ producto.nombre_producto }}</p>
+                <p>Precio: ${{ producto.precio }}</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="total-amount" *ngIf="total > 0">
+        <h3>Total a Pagar: ${{ total }}</h3>
+    </div>
+    
+    <button id="confirm-purchase-btn" *ngIf="total > 0">Confirmar Compra</button>
+</div>

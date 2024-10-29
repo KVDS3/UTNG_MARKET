@@ -1,112 +1,185 @@
-body {
-    font-family: 'Arial', sans-serif;
-    background-color: #f5f5f5;
-    color: #333;
-    margin: 0;
-}
-
+/* Contenedor principal */
 .container {
-    width: 80%;
-    margin: auto;
+    max-width: 1200px;
+    margin: 0 auto;
     padding: 20px;
+    font-family: Arial, sans-serif;
 }
 
+h1 {
+    font-family: 'Roboto', sans-serif;
+    font-size: 32px;
+    color: #333;
+    text-align: center;
+    font-weight: 700;
+    margin-bottom: 30px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    background: linear-gradient(90deg, #000000, #00a4e4); /* Degradado de PayPal */
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+/* Contenedor del carrito */
 .cart-container {
     display: flex;
     justify-content: space-between;
-    gap: 20px; /* Espacio entre los contenedores */
+    align-items: flex-start;
+    gap: 20px;
 }
 
+/* Contenedor de items */
 .cart-items {
     flex: 3;
-    padding: 20px;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    background-color: #ffffff; /* Fondo blanco para un diseño limpio */
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Sombra sutil */
 }
 
+/* Estilo del item individual */
 .cart-item {
     display: flex;
     align-items: center;
-    margin-bottom: 20px; /* Aumento del margen inferior para más separación */
-}
-
-.cart-item img {
-    width: 80px; /* Tamaño más uniforme para las imágenes */
-    height: auto;
-    border-radius: 5px; /* Bordes redondeados en las imágenes */
-    margin-right: 15px;
-}
-
-.cart-details {
-    flex: 1; /* Permitir que las descripciones ocupen el espacio restante */
-}
-
-.cart-details p {
-    margin: 5px 0;
-    font-size: 16px; /* Tamaño de fuente más legible */
-}
-
-.cart-summary {
-    flex: 1;
-    padding: 20px;
-    border: 1px solid #ccc;
+    gap: 15px;
+    padding: 15px;
+    border: 1px solid #e6e6e6;
+    margin-bottom: 15px;
     border-radius: 8px;
-    background-color: #f9f9f9; /* Fondo gris claro */
-    text-align: right;
+    background-color: #f9f9f9;
+}
+
+/* Imagen del producto */
+.cart-item img {
+    border-radius: 5px;
+    width: 100px;
+}
+
+/* Detalles del producto */
+.cart-details {
     display: flex;
     flex-direction: column;
+    flex: 1;
+}
+
+/* Nombre y precio */
+.product-info {
+    display: flex;
     justify-content: space-between;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Sombra sutil */
+    align-items: center;
 }
 
-.cart-total {
-    font-size: 20px; /* Aumento del tamaño de la fuente del total */
+.product-name {
     font-weight: bold;
-    color: #333; /* Color de texto más oscuro para el total */
+    color: #333;
 }
 
-.cart-actions {
-    margin-top: 20px;
+.product-price {
+    font-size: 1.2em;
+    color: #333;
+    margin-left: auto;
 }
 
-.btn {
-    background-color: #007BFF; /* Color azul para el botón de pago */
-    color: white;
-    padding: 10px 20px;
+/* Control de cantidad */
+.quantity-control {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.btn-decrement,
+.btn-increment {
+    width: 30px;
+    height: 30px;
     border: none;
-    border-radius: 4px; /* Bordes redondeados en el botón */
+    background-color: #ccc;
+    color: #333;
+    font-size: 1em;
     cursor: pointer;
-    font-size: 16px; /* Tamaño de fuente del botón */
-    transition: background-color 0.3s; /* Transición suave para el color de fondo */
-}
-
-.btn:hover {
-    background-color: #0056b3; /* Color al pasar el mouse */
-}
-
-/* Estilo de los botones de incremento/decremento */
-button.btn-decrement, button.btn-increment {
-    background-color: #e0e0e0; /* Color gris claro */
-    border: 1px solid #ccc;
-    border-radius: 4px; /* Bordes redondeados */
-    width: 30px; /* Ancho fijo */
-    height: 30px; /* Alto fijo */
-    font-size: 18px; /* Aumento del tamaño de fuente */
-    cursor: pointer;
-    transition: background-color 0.3s; /* Transición suave para el color de fondo */
-}
-
-button.btn-decrement:hover, button.btn-increment:hover {
-    background-color: #d0d0d0; /* Color al pasar el mouse */
+    border-radius: 50%;
 }
 
 .quantity-input {
-    width: 40px; /* Ancho fijo para el campo de entrada */
-    text-align: center; /* Alineación centrada */
-    border: 1px solid #ccc; /* Borde sutil */
-    border-radius: 4px; /* Bordes redondeados */
-    margin: 0 10px; /* Espacio entre los botones y el campo de entrada */
-    font-size: 16px; /* Tamaño de fuente del campo de entrada */
+    width: 50px;
+    text-align: center;
+    border: 1px solid #ccc;
+    border-radius: 4px;
 }
+
+/* Resumen del carrito */
+.cart-summary {
+    flex: 1;
+    border: 1px solid #e6e6e6;
+    padding: 20px;
+    border-radius: 8px;
+    background-color: #fdfdfd;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.cart-total p {
+    font-size: 1.5em;
+    font-weight: bold;
+    color: #333;
+}
+
+/* Botón de compra */
+.cart-actions .btn {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    font-size: 1.2em;
+    background-color: #007bff; /* Azul */
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    margin-top: 15px;
+}
+
+.cart-actions .btn:hover {
+    background-color: #0056b3; /* Azul más oscuro para hover */
+}
+.btn-remove {
+    margin-left: 10px; /* Espacio a la izquierda */
+    color: rgb(0, 0, 0); /* Color de texto blanco */
+    border: none; /* Sin borde */
+    padding: 5px 10px; /* Espaciado */
+    cursor: pointer; /* Cursor de mano */
+}
+.mensaje-eliminacion {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(0, 0, 0, 0.8); /* Fondo semitransparente */
+    color: #fff;
+    font-size: 2em;
+    z-index: 1000;
+    opacity: 0;
+    animation: fadeInOut 2s ease forwards;
+}
+
+@keyframes fadeInOut {
+    0% { opacity: 0; }
+    20%, 80% { opacity: 1; }
+    100% { opacity: 0; }
+}
+
+/* Estilo para el botón de carga */
+.spinner {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    border: 3px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    border-top-color: #ffffff;
+    animation: spin 0.6s linear infinite;
+  }
+  
+  @keyframes spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+  

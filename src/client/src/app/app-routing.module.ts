@@ -6,6 +6,8 @@ import { UsuariosComponent } from './component/usuarios/usuarios.component';
 import { CarritoComponent } from './component/carrito/carrito.component';
 import { AgreProductoComponent } from './component/agre-producto/agre-producto.component';
 import { FormaPagoComponent } from './component/forma-pago/forma-pago.component';
+import { ConfirmPagoComponent } from './component/confirm-pago/confirm-pago.component';
+import { AgreDireccionComponent } from './component/agre-direccion/agre-direccion.component';
 
 const routes: Routes = [
   {
@@ -33,6 +35,14 @@ const routes: Routes = [
   {
     path : 'formaPagos',
     component : FormaPagoComponent
+  },
+  {
+    path : 'confirmPago',
+    component : ConfirmPagoComponent
+  },
+  {
+    path : 'Direccion',
+    component : AgreDireccionComponent
   }
 ];
 

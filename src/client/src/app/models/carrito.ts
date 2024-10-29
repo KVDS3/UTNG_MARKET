@@ -1,4 +1,3 @@
-// carrito.ts
 export class Carrito {
   _id?: string;
   id_usuario: string;
@@ -13,15 +12,14 @@ export class Carrito {
     descripcion: string;
     fecha_publicacion: Date;
     categoria: string;
-    imagen?: string; // Agrega la propiedad imagen
+    imagen?: string; // Propiedad imagen opcional
   }[];
 
   constructor(id_usuario: string, estado: string, fecha_creacion: Date, productos: any[], _id?: string) {
-      this._id = _id;
-      this.id_usuario = id_usuario;
-      this.estado = estado;
-      this.fecha_creacion = fecha_creacion;
-      this.productos = productos;
+    this._id = _id;
+    this.id_usuario = id_usuario;
+    this.estado = estado;
+    this.fecha_creacion = fecha_creacion;
+    this.productos = productos;
   }
 }
- 

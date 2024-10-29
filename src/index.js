@@ -8,6 +8,8 @@ const usuariosRoutes = require('./routes/usuarios');
 const productosRoutes = require('./routes/productos');
 const carritoRoutes = require('./routes/carrito');
 const formasPagosRoutes = require('./routes/FormaPagos');
+const pagosRoutes = require('./routes/pagos');
+
 
 
 
@@ -32,6 +34,7 @@ app.use('/api', usuariosRoutes),
 app.use('/api', productosRoutes),
 app.use('/api', carritoRoutes),
 app.use('/api', formasPagosRoutes),
+app.use('/api', pagosRoutes),
 
 
 
