@@ -21,4 +21,9 @@ export class PagoService {
   getPagosByUsuario(id_usuario: string): Observable<Pago[]> {
     return this.http.get<Pago[]>(`${this.apiUrl}?id_usuario=${id_usuario}`);
   }
+  actualizarPago(id: string, nuevoTotal: number): Observable<any> {
+    return this.http.put<any>(`${this.apiUrl}/${id}`, { total: nuevoTotal });
+}
+  
+  
 }

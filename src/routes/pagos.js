@@ -4,16 +4,14 @@ const db = mongojs('127.0.0.1/utngMarket', ['pagos']); // Cambia el nombre de la
 
 // Obtener todos los pagos o verificar si existe un pago específico
 router.get('/pagos', (req, res, next) => {
-    const { id_usuario, id_carrito } = req.query; // Cambié idCarrito a id_carrito para mantener consistencia
+    const { id_usuario, id_carrito } = req.query;
     
-    // Si se proporcionan parámetros, buscar solo esos pagos
     if (id_usuario && id_carrito) {
-        db.pagos.find({ id_usuario: id_usuario, id_carrito: id_carrito }, (err, pagos) => {
+        db.pagos.find({ id_usuario, id_carrito }, (err, pagos) => {
             if (err) return next(err);
-            res.json(pagos); // Devuelve los pagos que coincidan
+            res.json(pagos);
         });
     } else {
-        // Si no se proporcionan parámetros, devolver todos los pagos
         db.pagos.find((err, pagos) => {
             if (err) return next(err);
             res.json(pagos);
@@ -31,25 +29,21 @@ router.get('/pagos/:id', (req, res, next) => {
 
 // Agregar un nuevo pago
 router.post('/pagos', (req, res, next) => {
-    const { id_usuario, id_carrito, total } = req.body; // Cambié los campos a lo que necesitas
+    const { id_usuario, id_carrito, total } = req.body;
 
-    // Validación básica
-    if (!id_usuario || !id_carrito || total == null) { // Revisa si el total es null o undefined
+    if (!id_usuario || !id_carrito || total == null) {
         return res.status(400).json({ error: 'Faltan campos requeridos' });
     }
 
-    const nuevoPago = { id_usuario, id_carrito, total }; // Crear el nuevo objeto de pago
+    const nuevoPago = { id_usuario, id_carrito, total };
 
-    // Aquí puedes agregar la lógica para verificar si el pago ya existe antes de guardarlo
     db.pagos.find({ id_usuario, id_carrito }, (err, pagos) => {
         if (err) return next(err);
         
-        // Si ya existe un pago, retorna un error
         if (pagos.length > 0) {
             return res.status(409).json({ error: 'Este pago ya existe.' });
         }
 
-        // Si no existe, guardar el nuevo pago
         db.pagos.save(nuevoPago, (err, pagoGuardado) => {
             if (err) return next(err);
             res.json(pagoGuardado);
@@ -66,29 +60,18 @@ router.delete('/pagos/:id', (req, res, next) => {
 });
 
 // Actualizar un pago por ID
-router.put('/pagos/:id', (req, res, next) => {
-    const pago = req.body;
-    const updatePago = {};
+router.put('/pagos/:id', (req, res) => {
+    const id = req.params.id; // Obtiene el ID del pago a actualizar de los parámetros de la URL
+    const { total } = req.body; // Extrae el nuevo total del cuerpo de la solicitud
 
-    // Solo se actualizan los campos que vienen en el cuerpo de la petición
-    if (pago.id_usuario) {
-        updatePago.id_usuario = pago.id_usuario;
-    }
-    if (pago.total != null) { // Asegúrate de que el total puede ser 0
-        updatePago.total = pago.total;
-    }
-    if (pago.id_carrito) {
-        updatePago.id_carrito = pago.id_carrito;
-    }
-
-    if (Object.keys(updatePago).length === 0) {
-        return res.status(400).json({ error: 'Bad Request' });
-    } else {
-        db.pagos.update({ _id: mongojs.ObjectId(req.params.id) }, { $set: updatePago }, (err, result) => {
-            if (err) return next(err);
-            res.json(result);
-        });
-    }
+    db.pagos.findAndModify({
+        query: { _id: mongojs.ObjectId(id) }, // Busca el pago por ID
+        update: { $set: { total } }, // Actualiza el campo total con el nuevo valor
+        new: true // Devuelve el documento actualizado
+    }, (err, pagoActualizado) => {
+        if (err) return res.status(500).json({ error: 'Error al actualizar el pago' }); // Manejo de errores
+        res.json(pagoActualizado); // Devuelve el pago actualizado como respuesta
+    });
 });
 
 module.exports = router;

@@ -99,31 +99,40 @@ export class CarritoComponent implements OnInit {
     if (this.carrito) {
       this.cargando = true;
   
-      const id_usuario = "usuario123"; // Suponiendo que este es el ID del usuario
-      const nuevoPago = new Pago(id_usuario, this.carrito._id || '', this.total);
+      const id_usuario = "usuario123"; // Suponiendo que este es el ID del usuario actual
+      const nuevoTotal = this.total;
   
-      // Verificar si el pago ya existe
-      this.pagoService.verificarPagoExistente(id_usuario, this.carrito._id || '').subscribe(existe => {
-        if (existe.length > 0) {
-          this.router.navigate(['/confirmPago']);
-          console.log('Este pago ya existe en la base de datos.');        
-          this.cargando = false; // Detener la animación de carga
-          // Aquí puedes mostrar un mensaje al usuario si lo deseas.
-        } else {
-          // Si no existe, proceder a guardar el nuevo pago
-          this.pagoService.guardarPago(nuevoPago).subscribe(() => {
-            console.log('Pago guardado exitosamente en la base de datos');
+      // Verificar si ya existe un pago para el id_usuario y el id del carrito
+      this.pagoService.verificarPagoExistente(id_usuario, this.carrito._id || '').subscribe(existente => {
+        if (existente.length > 0) {
+          // Si existe el pago, se actualiza el total
+          const pagoExistente = existente[0];
   
-            // Simular un tiempo de carga antes de redirigir
-            setTimeout(() => {
-              this.cargando = false;
-              this.router.navigate(['/confirmPago']); // Redirige a la pantalla de confirmación de pago
-            }, 2000); // Simula el tiempo de carga (2 segundos)
-  
+          // Actualiza el pago con el nuevo total
+          this.pagoService.actualizarPago(pagoExistente._id, nuevoTotal).subscribe(() => {
+            console.log('Pago actualizado exitosamente en la base de datos');
+            this.cargando = false;
+            this.router.navigate(['/confirmPago']); // Redirige a la pantalla de confirmación de pago
           }, error => {
-            console.error('Error al guardar el pago:', error);
+            console.error('Error al actualizar el pago:', error);
             this.cargando = false;
           });
+        } else {
+          // Si no existe el pago, crea uno nuevo
+          if (this.carrito?._id) { // Verifica que _id de carrito no sea null
+            const nuevoPago = new Pago(id_usuario, this.carrito._id, nuevoTotal);
+            this.pagoService.guardarPago(nuevoPago).subscribe(() => {
+              console.log('Pago guardado exitosamente en la base de datos');
+              this.cargando = false;
+              this.router.navigate(['/confirmPago']);
+            }, error => {
+              console.error('Error al guardar el pago:', error);
+              this.cargando = false;
+            });
+          } else {
+            console.error('El carrito no tiene un ID válido');
+            this.cargando = false;
+          }
         }
       }, error => {
         console.error('Error al verificar si el pago ya existe:', error);
@@ -131,5 +140,7 @@ export class CarritoComponent implements OnInit {
       });
     }
   }
+  }
   
-}
+  
+
