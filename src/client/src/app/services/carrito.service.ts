@@ -20,15 +20,20 @@ export class CarritoService {
         window.location.href = response.init_point;
       });
   }
-  // Agregar un producto al carrito
-  addToCarrito(carritoItem: any): Observable<any> {
-    return this.http.post(this.apiUrl, carritoItem); // Aquí se corrigió la URL
-  }
+  addToCarrito(producto: any): Observable<any> {
+    const carritoItem = {
+        id_usuario: 'usuario123', // Asegúrate de que el id_usuario sea correcto
+        ...producto // Incluye el resto de las propiedades del producto
+    };
+    return this.http.post(this.apiUrl, carritoItem);
+}
+
 
   // Eliminar un carrito por _id
-  deleteCarrito(_id: string): Observable<void> {
-    return this.http.delete<void>(`${this.apiUrl}/${_id}`);
-  }
+deleteCarrito(_id: string): Observable<void> {
+  return this.http.delete<void>(`${this.apiUrl}/${_id}`);
+}
+
 
   getCarritos(): Observable<Carrito[]> {
     return this.http.get<Carrito[]>(this.apiUrl); // Asegúrate de que esta ruta devuelva todos los carritos
@@ -43,4 +48,9 @@ export class CarritoService {
   updateCarrito(carrito: Carrito): Observable<Carrito> {
     return this.http.put<Carrito>(`${this.apiUrl}/${carrito._id}`, carrito); // Usamos _id en lugar de otro campo
   }
+  // carrito.service.ts
+getCarritoByUser(id_usuario: string): Observable<Carrito | null> {
+  return this.http.get<Carrito | null>(`${this.apiUrl}/usuario/${id_usuario}`);
+}
+
 }

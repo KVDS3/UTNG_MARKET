@@ -32,23 +32,26 @@ router.get('/carrito/:id', (req, res, next) => {
 
 // Agregar un nuevo producto al carrito
 router.post('/carrito', (req, res, next) => {
+    const { id_usuario, productos } = req.body;
+
+    // Validar que id_usuario y productos no sean nulos o indefinidos
+    if (!id_usuario || !Array.isArray(productos) || productos.length === 0) {
+        return res.status(400).json({ error: 'id_usuario y productos son requeridos.' });
+    }
+
+    // Validar cada producto
+    for (const producto of productos) {
+        const { id_producto, id_vendedor, nombre_producto, cantidad_dispo, categoria, precio, descripcion, fecha_publicacion, imagen } = producto;
+        if (!id_producto || !id_vendedor || !nombre_producto || cantidad_dispo == null || !categoria || precio == null || !descripcion || !fecha_publicacion) {
+            return res.status(400).json({ error: 'Todos los campos del producto son requeridos.' });
+        }
+    }
+
     const carrito = {
-        id_usuario: req.body.id_usuario,
+        id_usuario,
         estado: 'activo',
         fecha_creacion: new Date(),
-        productos: [
-            {
-                id_producto: req.body.id_producto,
-                id_vendedor: req.body.id_vendedor,
-                nombre_producto: req.body.nombre_producto,
-                cantidad_dispo: req.body.cantidad_dispo,
-                categoria: req.body.categoria,
-                precio: req.body.precio,
-                descripcion: req.body.descripcion,
-                fecha_publicacion: req.body.fecha_publicacion,
-                imagen: req.body.imagen // Agrega la propiedad imagen
-            }
-        ]
+        productos
     };
 
     db.carrito.insert(carrito, (err, carritoGuardado) => {
@@ -56,6 +59,7 @@ router.post('/carrito', (req, res, next) => {
         res.json(carritoGuardado);
     });
 });
+
 
 // Eliminar un producto del carrito por ID
 router.delete('/carrito/:id', (req, res, next) => {

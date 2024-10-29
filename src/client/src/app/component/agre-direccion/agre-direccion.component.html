@@ -1,0 +1,27 @@
+
+<body>
+    <div class="container">
+        <h2>Agregar Dirección de Envío</h2>
+        <form action="/agregar-direccion" method="POST">
+            <label for="nombre">Nombre Completo:</label>
+            <input type="text" id="nombre" name="nombre" required>
+
+            <label for="direccion">Dirección:</label>
+            <input type="text" id="direccion" name="direccion" required>
+
+            <label for="ciudad">Ciudad:</label>
+            <input type="text" id="ciudad" name="ciudad" required>
+
+            <label for="estado">Estado:</label>
+            <input type="text" id="estado" name="estado" required>
+
+            <label for="codigo_postal">Código Postal:</label>
+            <input type="text" id="codigo_postal" name="codigo_postal" required pattern="\d{5}">
+
+            <label for="telefono">Número de Teléfono:</label>
+            <input type="tel" id="telefono" name="telefono" required pattern="[0-9]{10}">
+
+            <button type="submit">Agregar Dirección</button>
+        </form>
+    </div>
+</body>

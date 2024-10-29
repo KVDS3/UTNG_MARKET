@@ -1,0 +1,93 @@
+h1 {
+    font-family: 'Roboto', sans-serif;
+    font-size: 32px;
+    color: #333;
+    text-align: center;
+    font-weight: 700;
+    margin-bottom: 30px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    background: linear-gradient(90deg, #000000, #00a4e4); /* Degradado de PayPal */
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  /* Contenedor principal de Resumen de Pago */
+#payment-summary {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+    border: 1px solid #e6e6e6;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+    font-family: Arial, sans-serif;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Título */
+#payment-summary h1 {
+    font-size: 1.8em;
+    color: #333;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+/* Información del producto */
+.product-info {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 15px 0;
+    border-bottom: 1px solid #e6e6e6;
+}
+
+.product-info:last-child {
+    border-bottom: none; /* Sin borde en el último producto */
+}
+
+/* Imagen del producto */
+.product-info img {
+    width: 100px;
+    border-radius: 5px;
+}
+
+/* Detalles del producto */
+.product-details {
+    flex: 1;
+}
+
+.cart-details p {
+    margin: 5px 0;
+    color: #333;
+    font-size: 1em;
+}
+
+/* Total a pagar */
+.total-amount {
+    margin-top: 20px;
+    text-align: center;
+}
+
+.total-amount h3 {
+    font-size: 1.5em;
+    font-weight: bold;
+    color: #333;
+}
+
+/* Botón de Confirmar Compra */
+#confirm-purchase-btn {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    font-size: 1.2em;
+    background-color: #007bff; /* Azul */
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    margin-top: 20px;
+}
+
+#confirm-purchase-btn:hover {
+    background-color: #0056b3; /* Azul más oscuro para hover */
+}
