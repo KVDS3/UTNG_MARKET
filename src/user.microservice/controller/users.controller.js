@@ -1,5 +1,6 @@
 const Usuario = require('../model/users.model'); // Asegúrate de ajustar la ruta al modelo
 const bcrypt = require('bcrypt');
+const RFC=require('../model/rfc.models')
 const jwt=require('jsonwebtoken')
 
 exports.registrarUsuario = async (req, res) => {
@@ -70,3 +71,17 @@ exports.loginUser = async (req, res) => {
     return res.status(500).json({ message: 'Error del servidor' });
   }
 };
+
+exports.getRFC = async (req, res) => {
+  const { rfc } = req.params;
+
+  // Busca el RFC en la base de datos
+  const record = await RFC.findOne({ rfc: rfc });
+
+  // Verifica si el RFC existe
+  const existence = record != null;
+
+  // Envía la respuesta
+  return res.status(200).json({ exists: existence });
+};
+

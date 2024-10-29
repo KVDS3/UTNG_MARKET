@@ -1,5 +1,4 @@
 const mongoose = require('mongoose');
-const { type } = require('os');
 
 const usuarioSchema = new mongoose.Schema({
   nombre: {
@@ -53,7 +52,7 @@ const usuarioSchema = new mongoose.Schema({
     rfc: {
       type: String,
       required: function() { return this.tipoUsuario === 'shop'; },
-      match: /^[A-Z0-9]{10}$/,
+      match: /^[A-Z0-9]{12}$/,
       unique: true,
     },
     giroComercial: {

@@ -22,6 +22,7 @@ app.post('/usuarios', usuarioController.registrarUsuario); // Crear usuario
 // app.put('/usuarios/:id', usuarioController.updateUser); // Actualizar usuario por ID
 // app.delete('/usuarios/:id', usuarioController.deleteUser); // Eliminar usuario por ID
 app.post('/usuarios/login', usuarioController.loginUser); // Login de usuario
+app.get('/rfc/:rfc',usuarioController.getRFC)
 
 // Iniciar el servidor
 app.listen(PORT, () => {
