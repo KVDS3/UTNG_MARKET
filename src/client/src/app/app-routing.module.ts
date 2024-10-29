@@ -5,12 +5,17 @@ import { HomeComponent } from './component/home/home.component';
 import { UsuariosComponent } from './component/usuarios/usuarios.component';
 import { CarritoComponent } from './component/carrito/carrito.component';
 import { AgreProductoComponent } from './component/agre-producto/agre-producto.component';
+import { LogInComponent } from './component/log-in/log-in.component';
 
 const routes: Routes = [
   {
     path : '',
     redirectTo : '/home',
     pathMatch : 'full'
+  },
+  {
+    path:'LogIn',
+    component:LogInComponent
   },
 
   {

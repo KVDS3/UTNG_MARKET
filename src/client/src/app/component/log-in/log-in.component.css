@@ -1,0 +1,93 @@
+/* Fondo de la página con un degradado */
+body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    margin: 0;
+    /* background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%); */
+    font-family: Arial, sans-serif;
+    color: #333;
+}
+
+/* Contenedor de la tarjeta */
+.container {
+    width: 400px;
+    background-color: rgba(255, 255, 255, 0.8); /* Fondo gris claro difuminado */
+    border-radius: 15px;
+    box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.2); /* Sombra suave */
+    padding: 20px;
+    margin-top: 20px;
+}
+
+.cont{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* Estilos para el encabezado */
+.head {
+    color: #444;
+    font-size: 1.8rem;
+    font-weight: bold;
+    margin-bottom: 15px;
+    text-align: center;
+}
+
+/* Estilos para el formulario */
+.form-group {
+    margin-bottom: 15px;
+}
+
+/* Inputs del formulario */
+input[type="text"],
+input[type="email"],
+input[type="password"],
+select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-sizing: border-box;
+    margin-top: 5px;
+    font-size: 1rem;
+}
+
+/* Botón de envío */
+.btn-primary {
+    width: 100%;
+    background-color: #6a11cb;
+    border: none;
+    color: white;
+    padding: 12px;
+    font-size: 1rem;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.btn-primary:hover {
+    background-color: #2575fc;
+}
+
+/* Mensaje de error */
+.text-danger {
+    color: #d9534f;
+    font-size: 0.9rem;
+    margin-top: 5px;
+}
+
+/* Ajuste en dispositivos móviles */
+@media (max-width: 500px) {
+    .container {
+        width: 90%;
+        padding: 15px;
+    }
+
+    .btn-primary {
+        font-size: 0.9rem;
+        padding: 10px;
+    }
+}
