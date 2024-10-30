@@ -52,5 +52,7 @@ deleteCarrito(_id: string): Observable<void> {
 getCarritoByUser(id_usuario: string): Observable<Carrito | null> {
   return this.http.get<Carrito | null>(`${this.apiUrl}/usuario/${id_usuario}`);
 }
-
+obtenerCarrito(): Observable<Carrito> {
+  return this.http.get<Carrito>(this.apiUrl);
+}
 }

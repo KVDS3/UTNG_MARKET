@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Página de Ofertas</title>
+  <link rel="stylesheet" href="productos-inicio.component.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+  <header>
+    <div class="header-bar">
+      <div class="location">Utng Market</div>
+      <div class="container">
+        <input type="text" [(ngModel)]="query" (input)="filtrarProductos()" name="search" placeholder="Buscar un producto específico..." required class="search-input" />
+        <button type="submit" class="search-button">Buscar</button>
+        <div class="carrito">
+          <button class="carrito-button" (click)="irACarrito()">
+            <i class="fas fa-shopping-cart"></i>
+            <span class="cantidad">{{ cantidadTotal }}</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </header>
+  <div class="categories-header">
+    <h2>Categorías</h2>
+  </div>
+  <div class="banner">
+    <div class="banner-content"></div>
+    <div class="banner-images">
+      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTtmj-OTFsUryFHGu8ZbjQu4s_pyi-EGLhNXQ7mhDJBf7Gd-QivQxvMXWHHyR0oUPGB17A&usqp=CAU" alt="Producto 1">
+      <img src="https://static.nike.com/a/images/t_PDP_936_v1/f_auto,q_auto:eco/fe1b62fe-1124-4c4c-b947-949cfdafd9d2/NK+HERITAGE+BKPK.png" alt="Producto 2">
+      <img src="https://m.media-amazon.com/images/I/61RAyDm6CXL.AC_UF1000,1000_QL80.jpg" alt="Producto 3">
+      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRwv6IN9Vl0qEje7UV7sNizulVQ9ZC9dTKGkz6nRXQ4_nXxx4QL0th6lGpSgJR5Ru7Euxc&usqp=CAU" alt="Producto 6">
+    </div>
+  </div>
+
+  
+
+  <div class="product-section">
+
+    <ul class="product-list">
+      <li *ngFor="let producto of productos" class="product-item" (click)="openModal(producto)">
+        <img [src]="producto.imagen_url" [alt]="producto.nombre_producto" class="product-image" />
+        <a class="product-name">{{ producto.nombre_producto }}</a>
+        <div class="product-details">
+          <div class="price-section">
+            <span class="price">${{ producto.precio }}</span>
+          </div>
+        </div>
+      </li>
+    </ul>
+  </div>
+
+  <!-- Modal -->
+  <div class="modal" *ngIf="selectedProduct" (click)="closeModal()">
+    <div class="modal-content" (click)="$event.stopPropagation()">
+      <span class="close" (click)="closeModal()">&times;</span>
+      <div class="modal-body">
+        <img [src]="selectedProduct.imagen_url" [alt]="selectedProduct.nombre_producto" class="modal-image" />
+        <div class="modal-details">
+          <h2>{{ selectedProduct.nombre_producto }}</h2>
+          <p></p>
+          <p><strong>Características:</strong> {{ selectedProduct.descripcion }}</p>
+          <p class="modal-price"><strong>Precio:</strong> ${{ selectedProduct.precio }}</p>
+          <p><strong>Disponibles:</strong> {{ selectedProduct.cantidad_dispo }}</p>
+          <button class="add-to-cart" (click)="agregarAlCarrito(selectedProduct)">Agregar al Carrito</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="mensajeVisible" class="mensaje-eliminacion">
+    {{ mensaje }}
+  </div>
+  
+</body>
+</html>
