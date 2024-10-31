@@ -1,7 +1,7 @@
 <body>
   <header>
     <div class="header-bar">
-      <div class="location">Utng Market</div>
+      <div class="location" >Utng Market</div>
       <div class="container">
         <input
           type="text"
@@ -12,6 +12,11 @@
           required
           class="search-input"
         />
+        <div>
+          <button class="new-product" routerLink="/agre_producto">
+            subir producto
+          </button>
+        </div>
         <div class="carrito">
           <button class="carrito-button" (click)="irACarrito()">
             <i class="fas fa-shopping-cart"></i>
@@ -21,9 +26,15 @@
       </div>
     </div>
     <!-- Opciones de autocompletado -->
-    <div class="autocomplete-options" *ngIf="query && productosFiltrados.length > 0">
+    <div
+      class="autocomplete-options"
+      *ngIf="query && productosFiltrados.length > 0"
+    >
       <ul>
-        <li *ngFor="let producto of productosFiltrados" (click)="selectProducto(producto)">
+        <li
+          *ngFor="let producto of productosFiltrados"
+          (click)="selectProducto(producto)"
+        >
           {{ producto.nombre_producto }}
         </li>
       </ul>
@@ -32,7 +43,11 @@
 
   <div *ngIf="searchMode" class="product-list-search">
     <div *ngFor="let product of productosFiltrados" class="product-item-list">
-      <img [src]="product.imagen_url" alt="{{ product.nombre_producto }}" class="product-image" />
+      <img
+        [src]="product.imagen_url"
+        alt="{{ product.nombre_producto }}"
+        class="product-image"
+      />
       <div class="product-info">
         <h3>{{ product.nombre_producto }}</h3>
         <p>{{ product.descripcion }}</p>
@@ -40,126 +55,106 @@
         <p>Disponible: {{ product.cantidad_dispo }}</p>
       </div>
       <div>
-        <button class="add-to-cart" (click)="agregarAlCarrito(product)">Agregar al carrito</button>
-      </div>
-  <div class="categories-header">
-    <h2>Categorías</h2>
-  </div>
-  <div class="banner">
-    <div class="banner-content"></div>
-    <div class="banner-images">
-      <img
-        src="https://lh5.googleusercontent.com/proxy/d-AAah5u7t2U19JMZ1x2sNSDiMRlOGCtX4fSnXC37SeO36p4IPo4sfEV0hEIsVdEaw5l9zUo8_JVHHIE3NJbugxSGl2_3p6R92kL9HvuyXcZRjZb"
-        alt="Tecnologia y Accesorios"
-        title="Tecnologia y Accesorios"
-        (click)="navigateToFilter('Tecnologia y Accesorios')"
-      />
-      <img
-        src="https://regalosparacientificos.com/wp-content/uploads/2019/09/material-para-ir-a-la-universidad-1.jpg"
-        alt="Material de Estudio y Papelería"
-        title="Material de Estudio y Papelería"
-        (click)="navigateToFilter('Material de Estudio y Papeleria')"
-      />
-      <img
-        src="https://teefactory.es/mds/publicitario/img/merchandising/comprar-merchandising-personalizado2.jpg"
-        alt="Ropa y Merchandising Universitario"
-        title="Ropa y Merchandising Universitario"
-        (click)="navigateToFilter('Ropa y Merchandising universitario')"
-      />
-      <img
-        src="https://www.topkit.es/blog/wp-content/uploads/2015/09/muebles-oficina.jpg"
-        alt="Mobiliario y Organización"
-        title="Mobiliario y Organización"
-        (click)="navigateToFilter('Mobiliario y Organizacion')"
-      />
-    </div>
-  </div>
-   
-
-  <section *ngIf="!searchMode">
-    <div class="categories-header">
-      <h2>Categorías</h2>
-    </div>
-    <div class="banner">
-      <div class="banner-content"></div>
-      <div class="banner-images">
-        <img
-          src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTtmj-OTFsUryFHGu8ZbjQu4s_pyi-EGLhNXQ7mhDJBf7Gd-QivQxvMXWHHyR0oUPGB17A&usqp=CAU"
-          alt="Producto 1"
-        />
-        <img
-          src="https://static.nike.com/a/images/t_PDP_936_v1/f_auto,q_auto:eco/fe1b62fe-1124-4c4c-b947-949cfdafd9d2/NK+HERITAGE+BKPK.png"
-          alt="Producto 2"
-        />
-        <img
-          src="https://m.media-amazon.com/images/I/61RAyDm6CXL.AC_UF1000,1000_QL80.jpg"
-          alt="Producto 3"
-        />
-        <img
-          src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRwv6IN9Vl0qEje7UV7sNizulVQ9ZC9dTKGkz6nRXQ4_nXxx4QL0th6lGpSgJR5Ru7Euxc&usqp=CAU"
-          alt="Producto 6"
-        />
+        <button class="add-to-cart" (click)="agregarAlCarrito(product)">
+          Agregar al carrito
+        </button>
       </div>
     </div>
+  </div>
 
-    <div class="product-section">
-      <ul class="product-list">
-        <li
-          *ngFor="let producto of productos"
-          class="product-item"
-          (click)="openModal(producto)"
-        >
-          <img
-            [src]="producto.imagen_url"
-            [alt]="producto.nombre_producto"
-            class="product-image"
-          />
-          <a class="product-name">{{ producto.nombre_producto }}</a>
-          <div class="product-details">
-            <div class="price-section">
-              <span class="price">${{ producto.precio }}</span>
-            </div>
+      <section *ngIf="!searchMode">
+        <div class="categories-header">
+          <h2>Categorías</h2>
+        </div>
+        <div class="banner">
+          <div class="banner-content"></div>
+          <div class="banner-images">
+            <img
+              src="https://lh5.googleusercontent.com/proxy/d-AAah5u7t2U19JMZ1x2sNSDiMRlOGCtX4fSnXC37SeO36p4IPo4sfEV0hEIsVdEaw5l9zUo8_JVHHIE3NJbugxSGl2_3p6R92kL9HvuyXcZRjZb"
+              alt="Tecnologia y Accesorios"
+              title="Tecnologia y Accesorios"
+              (click)="navigateToFilter('Tecnologia y Accesorios')"
+            />
+            <img
+              src="https://regalosparacientificos.com/wp-content/uploads/2019/09/material-para-ir-a-la-universidad-1.jpg"
+              alt="Material de Estudio y Papelería"
+              title="Material de Estudio y Papelería"
+              (click)="navigateToFilter('Material de Estudio y Papeleria')"
+            />
+            <img
+              src="https://teefactory.es/mds/publicitario/img/merchandising/comprar-merchandising-personalizado2.jpg"
+              alt="Ropa y Merchandising Universitario"
+              title="Ropa y Merchandising Universitario"
+              (click)="navigateToFilter('Ropa y Merchandising universitario')"
+            />
+            <img
+              src="https://www.topkit.es/blog/wp-content/uploads/2015/09/muebles-oficina.jpg"
+              alt="Mobiliario y Organización"
+              title="Mobiliario y Organización"
+              (click)="navigateToFilter('Mobiliario y Organizacion')"
+            />
           </div>
-        </li>
-      </ul>
-    </div>
+        </div>
 
-    <!-- Modal -->
-    <div class="modal" *ngIf="selectedProduct" (click)="closeModal()">
-      <div class="modal-content" (click)="$event.stopPropagation()">
-        <span class="close" (click)="closeModal()">&times;</span>
-        <div class="modal-body">
-          <img
-            [src]="selectedProduct.imagen_url"
-            [alt]="selectedProduct.nombre_producto"
-            class="modal-image"
-          />
-          <div class="modal-details">
-            <h2>{{ selectedProduct.nombre_producto }}</h2>
-            <p class="description">
-              <strong></strong> {{ selectedProduct.descripcion }}
-            </p>
-            <p class="modal-price">
-              <strong>Precio:</strong> ${{ selectedProduct.precio }}
-            </p>
-            <div class="quantity-container">
-              <p>
-                <strong>Disponibles:</strong>
-                {{ selectedProduct.cantidad_dispo }}
-              </p>
-              <button
-                class="add-to-cart"
-                (click)="agregarAlCarrito(selectedProduct)"
-              >
-                Agregar al Carrito
-              </button>
+        <div class="product-section">
+          <ul class="product-list">
+            <li
+              *ngFor="let producto of productos"
+              class="product-item"
+              (click)="openModal(producto)"
+            >
+              <img
+                [src]="producto.imagen_url"
+                [alt]="producto.nombre_producto"
+                class="product-image"
+              />
+              <a class="product-name">{{ producto.nombre_producto }}</a>
+              <div class="product-details">
+                <div class="price-section">
+                  <span class="price">${{ producto.precio }}</span>
+                </div>
+              </div>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Modal -->
+        <div class="modal" *ngIf="selectedProduct" (click)="closeModal()">
+          <div class="modal-content" (click)="$event.stopPropagation()">
+            <span class="close" (click)="closeModal()">&times;</span>
+            <div class="modal-body">
+              <img
+                [src]="selectedProduct.imagen_url"
+                [alt]="selectedProduct.nombre_producto"
+                class="modal-image"
+              />
+              <div class="modal-details">
+                <h2>{{ selectedProduct.nombre_producto }}</h2>
+                <p class="description">
+                  <strong></strong> {{ selectedProduct.descripcion }}
+                </p>
+                <p class="modal-price">
+                  <strong>Precio:</strong> ${{ selectedProduct.precio }}
+                </p>
+                <div class="quantity-container">
+                  <p>
+                    <strong>Disponibles:</strong>
+                    {{ selectedProduct.cantidad_dispo }}
+                  </p>
+                  <button
+                    class="add-to-cart"
+                    (click)="agregarAlCarrito(selectedProduct)"
+                  >
+                    Agregar al Carrito
+                  </button>
+                </div>
+              </div>
             </div>
           </div>
         </div>
-      </div>
-    </div>
 
-    <div *ngIf="mensajeVisible" class="mensaje-eliminacion">
-      {{ mensaje }}
-    </div>
-  </section>
+        <div *ngIf="mensajeVisible" class="mensaje-eliminacion">
+          {{ mensaje }}
+        </div>
+    </section>
+  </body>

@@ -8,7 +8,7 @@ const path = require('path');
 const fs = require('fs'); // Importar el módulo fs para manejar archivos
 
 const router = express.Router();
-const db = mongojs('127.0.0.1/utngMarket', ['productos']);
+const db = mongojs('127.0.0.1/UTNGMARKET', ['productos']);
 
 // Configuración de multer para guardar imágenes
 const storage = multer.diskStorage({
