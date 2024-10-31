@@ -335,7 +335,7 @@ header {
 }
 
 .search-button:hover {
-  background-color: #e9ecef; /* Color de fondo en hover */
+  background-color: #ffffff; /* Color de fondo en hover */
 }
 
 /* Estilo del carrito */
@@ -444,5 +444,29 @@ header {
 
 
 .modal-details .description {
-  margin-top: 30px;    /* Espacio encima solo del párrafo de descripción */
+  margin-top: 30px;    /* Espacio encima solo del párrafo de descripción */
+}
+
+.autocomplete-options {
+  color: #333;
+  border: 1px solid #ccc;
+  background-color: white;
+  position: absolute; /* Asegúrate de que se superponga correctamente */
+  z-index: 1000; /* Para asegurarte de que esté encima de otros elementos */
+  width: 100%; /* Para que coincida con el ancho del input */
+}
+
+.autocomplete-options ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+.autocomplete-options li {
+  padding: 8px; /* Espaciado dentro de cada opción */
+  cursor: pointer; /* Indica que es clickeable */
+}
+
+.autocomplete-options li:hover {
+  background-color: #f0f0f0; /* Efecto hover */
 }

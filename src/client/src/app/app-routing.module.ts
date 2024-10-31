@@ -10,6 +10,7 @@ import { FormaPagoComponent } from './component/forma-pago/forma-pago.component'
 import { ConfirmPagoComponent } from './component/confirm-pago/confirm-pago.component';
 import { AgreDireccionComponent } from './component/agre-direccion/agre-direccion.component';
 import { ProductosInicioComponent } from './component/productos-inicio/productos-inicio.component';
+import { ProductosFiltroComponent } from './component/productos-filtro/productos-filtro.component';
 
 
 const routes: Routes = [
@@ -54,7 +55,16 @@ const routes: Routes = [
   {
     path : 'inicio',
     component : ProductosInicioComponent
-  }
+  },
+
+{
+  path : 'productosF',
+  component : ProductosFiltroComponent
+},
+{ path: 'productosF/:categoria',
+  component: ProductosFiltroComponent 
+} 
+
 ];
 
 @NgModule({
