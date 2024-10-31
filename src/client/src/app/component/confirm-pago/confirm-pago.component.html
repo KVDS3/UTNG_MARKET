@@ -19,5 +19,5 @@
         <h3>Total a Pagar: ${{ total }}</h3>
     </div>
     
-    <button id="confirm-purchase-btn" *ngIf="total > 0">Confirmar Compra</button>
+    <button id="confirm-purchase-btn" *ngIf="total > 0" (click)="confirmarCompra()">Confirmar compra</button>
 </div>
