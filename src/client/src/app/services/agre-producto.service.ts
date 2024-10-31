@@ -42,6 +42,11 @@ export class ProductosService {
     );
   }
 
+  // Crear un nuevo producto
+  createProducto(producto: Productos): Observable<Productos> {
+    return this.http.post<Productos>(this.apiUrl, producto);
+  }
+
   getProductosByVendedor(vendedor:string): Observable<Productos[]> {
     return this.http.get<Productos[]>(this.apiUrl+'/vendedor/'+vendedor).pipe(
       catchError(error => {

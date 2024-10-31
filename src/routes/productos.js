@@ -60,7 +60,6 @@ router.get('/productos/vendedor/:id', (req, res, next) => {
     });
 });
 
-// Obtener un producto por ID
 router.get('/productos/:id', (req, res, next) => {
     const id = req.params.id;
     if (!mongojs.ObjectId.isValid(id)) {
