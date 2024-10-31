@@ -13,6 +13,7 @@ import { jwtDecode } from 'jwt-decode';
 })
 export class AgreProductoComponent implements OnInit {
   productos: Productos[] = [];
+  productosfiltered: Productos[] = [];
   producto: Productos = new Productos('', '', 0, 0, '', new Date(), '');
   editando: boolean = false;
   selectedFile: File | null = null;  
@@ -34,16 +35,18 @@ export class AgreProductoComponent implements OnInit {
       this.vendedor = decodedToken.username; // Asume que el campo vendedor está en el token
       console.log(this.vendedor); // Opcional: Verifica los datos decodificados
     }
+    
   }
 
   listarProductos(): void {
-    this.productosService.getProductos().subscribe(
+    this.productosService.getProductosByVendedor(this.id_vendedor).subscribe(
       (data: Productos[]) => {
         this.productos = data.map(producto => ({
           ...producto,
           imagen_url: `http://localhost:3000${producto.imagen_url}`
         }));
         console.log(this.productos);
+        this.mostrarProductosDisponibles();
       },
       error => {
         console.error('Error al obtener productos', error);
@@ -55,11 +58,7 @@ export class AgreProductoComponent implements OnInit {
     this.selectedFile = event.target.files[0];
 
     if (this.selectedFile) {
-      const reader = new FileReader();
-      reader.readAsDataURL(this.selectedFile);
-      reader.onload = () => {
-        this.previewUrl = reader.result;
-      };
+      this.handleFile(this.selectedFile);
     } else {
       this.previewUrl = null;
     }
@@ -141,6 +140,7 @@ export class AgreProductoComponent implements OnInit {
   editarProducto(producto: Productos): void {
     this.producto = { ...producto };
     this.editando = true;
+    this.isFormVisible=true;
     this.previewUrl = producto.imagen_url || null;
   }
 
@@ -166,9 +166,9 @@ export class AgreProductoComponent implements OnInit {
   
   onDrop(event: DragEvent) {
     event.preventDefault();
-    const file = event.dataTransfer?.files[0];
-    if (file && file.type.startsWith('image/')) {
-      this.handleFile(file);
+    this.selectedFile = event.dataTransfer?.files[0] as File;
+    if (this.selectedFile && this.selectedFile.type.startsWith('image/')) {
+      this.handleFile(this.selectedFile);
     }
   }
   
@@ -178,6 +178,25 @@ export class AgreProductoComponent implements OnInit {
       this.previewUrl = reader.result as string;
     };
     reader.readAsDataURL(file);
+  }
+  
+  isFormVisible: boolean = false;
+
+  mostrarFormulario(): void {
+    this.isFormVisible = true; // Muestra el formulario
+    this.editando = false; // Asegúrate de que no esté en modo edición
+  }
+
+  cerrarFormulario() {
+    this.isFormVisible = false;
+  }
+
+  mostrarProductosDisponibles() {
+    this.productosfiltered = this.productos.filter(p => p.cantidad_dispo > 0);
+  }
+
+  mostrarProductosVendidos() {
+    this.productosfiltered = this.productos.filter(p => p.cantidad_dispo === 0);
   }
   
 }

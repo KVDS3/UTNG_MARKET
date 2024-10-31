@@ -42,6 +42,15 @@ export class ProductosService {
     );
   }
 
+  getProductosByVendedor(vendedor:string): Observable<Productos[]> {
+    return this.http.get<Productos[]>(this.apiUrl+'/vendedor/'+vendedor).pipe(
+      catchError(error => {
+        console.error('Error fetching products', error);
+        return throwError(error);
+      })
+    );
+  }
+
   updateProducto(id: string, formData: FormData): Observable<any> {
     return this.http.put(`${this.apiUrl}/${id}`, formData).pipe(
         catchError(error => {

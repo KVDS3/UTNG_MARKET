@@ -51,6 +51,15 @@ router.get('/productos', (req, res, next) => {
     });
 });
 
+router.get('/productos/vendedor/:id', (req, res, next) => {
+    const vendedorId = req.params.id; // Obtener el ID del vendedor desde los parámetros de la URL
+
+    db.productos.find({ id_vendedor: vendedorId }, (err, productos) => { // Filtrar los productos por el ID del vendedor
+        if (err) return next(err);
+        res.json(productos); // Enviar la lista de productos filtrados como respuesta
+    });
+});
+
 // Obtener un producto por ID
 router.get('/productos/:id', (req, res, next) => {
     const id = req.params.id;
