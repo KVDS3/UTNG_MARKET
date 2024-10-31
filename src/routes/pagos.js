@@ -21,7 +21,12 @@ router.get('/pagos', (req, res, next) => {
 
 // Obtener un solo pago por ID
 router.get('/pagos/:id', (req, res, next) => {
-    db.pagos.findOne({ _id: mongojs.ObjectId(req.params.id) }, (err, pago) => {
+    const id = req.params.id; // Obtiene el ID de la URL
+    if (!mongojs.ObjectId.isValid(id)) {
+        return res.status(400).json({ error: 'ID inválido' });
+    }
+
+    db.pagos.findOne({ _id: mongojs.ObjectId(id) }, (err, pago) => {
         if (err) return next(err);
         res.json(pago);
     });
@@ -53,7 +58,12 @@ router.post('/pagos', (req, res, next) => {
 
 // Eliminar un pago por ID
 router.delete('/pagos/:id', (req, res, next) => {
-    db.pagos.remove({ _id: mongojs.ObjectId(req.params.id) }, (err, result) => {
+    const id = req.params.id;
+    if (!mongojs.ObjectId.isValid(id)) {
+        return res.status(400).json({ error: 'ID inválido' });
+    }
+
+    db.pagos.remove({ _id: mongojs.ObjectId(id) }, (err, result) => {
         if (err) return next(err);
         res.json(result);
     });
@@ -62,6 +72,10 @@ router.delete('/pagos/:id', (req, res, next) => {
 // Actualizar un pago por ID
 router.put('/pagos/:id', (req, res) => {
     const id = req.params.id; // Obtiene el ID del pago a actualizar de los parámetros de la URL
+    if (!mongojs.ObjectId.isValid(id)) {
+        return res.status(400).json({ error: 'ID inválido' });
+    }
+    
     const { total } = req.body; // Extrae el nuevo total del cuerpo de la solicitud
 
     db.pagos.findAndModify({
@@ -73,5 +87,24 @@ router.put('/pagos/:id', (req, res) => {
         res.json(pagoActualizado); // Devuelve el pago actualizado como respuesta
     });
 });
+router.get('/pagos/total/:id_usuario', (req, res) => {
+    const id_usuario = req.params.id_usuario;
 
+    db.pagos.aggregate([
+        { $match: { id_usuario: id_usuario } },
+        { $group: { _id: null, total: { $sum: '$total' } } }
+    ], (err, result) => {
+        if (err) {
+            console.error('Error al obtener el total de pagos:', err);
+            return res.status(500).json({ message: 'Error interno del servidor' });
+        }
+
+        // Imprimir el resultado antes de responder
+        console.log('Resultado de la agregación:', result);
+
+        const total = result.length > 0 ? result[0].total : 0; 
+        console.log('Total a enviar:', total); // Ver qué total se está enviando
+        res.json({ total });
+    });
+});
 module.exports = router;

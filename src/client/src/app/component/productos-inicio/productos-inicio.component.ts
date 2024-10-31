@@ -95,7 +95,7 @@ export class ProductosInicioComponent implements OnInit {
         id_producto: producto._id,
         id_vendedor: producto.id_vendedor,
         nombre_producto: producto.nombre_producto,
-        cantidad_dispo: 1,
+        cantidad_dispo: producto.cantidad_dispo,
         precio: Number(producto.precio),
         descripcion: producto.descripcion,
         fecha_publicacion: new Date(producto.fecha_publicacion),

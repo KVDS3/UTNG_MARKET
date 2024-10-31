@@ -1,45 +1,29 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, throwError } from 'rxjs';
-import { catchError } from 'rxjs/operators';
+import { Observable } from 'rxjs';
 import { Productos } from '../models/productos';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ProductosService {
-  private apiUrl = 'http://localhost:3000/api/productos';
+  private apiUrl = 'http://localhost:3000/api/productos'; // Cambia por tu URL de la API
 
   constructor(private http: HttpClient) {}
 
-  // Método para eliminar un producto
-  deleteProducto(id: string): Observable<any> {
-    return this.http.delete(`${this.apiUrl}/${id}`).pipe(
-      catchError(error => {
-        console.error('Error deleting product', error);
-        return throwError(error);
-      })
-    );
+  // Eliminar un producto por _id
+  deleteProducto(_id: string): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/${_id}`);
   }
 
-  // Método para agregar un producto
-  addProducto(formData: FormData): Observable<Productos> {
-    return this.http.post<Productos>(this.apiUrl, formData).pipe(
-      catchError(error => {
-        console.error('Error adding product', error);
-        return throwError(error);
-      })
-    );
-  }
-
-  // Método para obtener todos los productos
+  // Obtener todos los productos
   getProductos(): Observable<Productos[]> {
-    return this.http.get<Productos[]>(this.apiUrl).pipe(
-      catchError(error => {
-        console.error('Error fetching products', error);
-        return throwError(error);
-      })
-    );
+    return this.http.get<Productos[]>(this.apiUrl);
+  }
+
+  // Crear un nuevo producto
+  createProducto(producto: Productos): Observable<Productos> {
+    return this.http.post<Productos>(this.apiUrl, producto);
   }
 
   getProductosByVendedor(vendedor:string): Observable<Productos[]> {
@@ -58,5 +42,5 @@ export class ProductosService {
             return throwError(error);
         })
     );
-}
+  }
 }
