@@ -221,8 +221,8 @@ body {
 .modal-content {
   background: white;
   padding: 30px; /* Aumentar el padding para más espacio */
-  width: 90%;
-  max-width: 600px; /* Ampliar el ancho máximo */
+  width: 80%;
+  max-width: 700px; /* Ampliar el ancho máximo */
   border-radius: 8px;
   position: relative;
   text-align: center;
@@ -230,13 +230,14 @@ body {
 }
 
 .modal-image {
-  width: 100%;
-  max-height: 300px;
-  object-fit: contain;
-  margin-bottom: 20px;
-  border-radius: 8px; /* Bordes redondeados */
+  width: 300px;                   /* Define el ancho fijo para todas las imágenes */
+  height: 335px;                  /* Define la altura fija para todas las imágenes */
+  object-fit: cover;              /* Recorta o escala la imagen para llenar el contenedor sin distorsión */
+  margin-right: 40px;
 }
-
+.modal-details {
+  flex-grow: 1;                    /* Ocupa el espacio restante a la derecha de la imagen */
+}
 .close {
   position: absolute;
   top: 15px; /* Cambiar posición */
@@ -261,31 +262,9 @@ body {
 }
 
 .modal-body {
-  display: flex; /* Usar flexbox para alinear elementos */
-  align-items: flex-start; /* Alinear al inicio en la parte superior */
+  display: flex;                   /* Activa flexbox para alinear los elementos */
+  align-items: flex-start;         /* Alinea los elementos en la parte superior del contenedor */
 }
-
-.modal-image {
-  width: 40%; /* Ajustar el ancho de la imagen */
-  max-height: 300px; /* Mantener la altura máxima */
-  object-fit: contain;
-  margin-right: 20px; /* Espacio entre la imagen y los detalles */
-}
-
-.modal-details {
-  width: 60%; /* Ajustar el ancho de los detalles */
-  text-align: left; /* Alinear el texto a la izquierda */
-}
-
-
-
-
-
-
-
-/* Estilos para el botón de búsqueda */
-
-
 
 
 
@@ -393,6 +372,8 @@ header {
   font-size: 24px; /* Tamaño de fuente */
   color: #333; /* Color del texto (puedes ajustar este color) */
   font-weight: bold; /* Hacer el texto en negrita */
+  margin-bottom: 20px; /* Añade espacio debajo del título */
+
 }
 .add-to-cart {
   padding: 10px;
@@ -436,4 +417,32 @@ header {
   0% { opacity: 0; }
   20%, 80% { opacity: 1; }
   100% { opacity: 0; }
+}
+.quantity-container {
+  display: flex;                   /* Activar el modelo flexbox */
+  justify-content: space-between;  /* Separar elementos al máximo */
+  align-items: center;             /* Centrar verticalmente los elementos */
+  margin-top: 50px; /* Ajusta este valor para controlar la separación */
+
+}
+
+.add-to-cart {
+  margin-left: 0;                 /* Asegurar que no haya margen a la izquierda */
+}
+
+.quantity-container p {
+  margin: 0;                       /* Eliminar margen del párrafo */
+  order: 2;                        /* Asegurar que el párrafo esté al final (a la derecha) */
+}
+
+.add-to-cart {
+  order: 1;                        /* Asegurar que el botón esté al principio (a la izquierda) */
+  margin-right: 30px;             /* Espaciado entre el botón y el texto */
+}
+
+
+
+
+.modal-details .description {
+  margin-top: 30px;    /* Espacio encima solo del párrafo de descripción */
 }
