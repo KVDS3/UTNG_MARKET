@@ -20,9 +20,6 @@ export class ProductosInicioComponent implements OnInit {
   mensaje: string | null = null; // Mensaje de confirmación
   mensajeVisible: boolean = false; // Para controlar la visibilidad del mensaje
   searchMode:boolean = false;
-  selectedProduct: Productos | null = null;
-  mensaje: string | null = null;
-  mensajeVisible: boolean = false;
   mostrarSugerencias: boolean = false;
 
   constructor(
@@ -55,6 +52,7 @@ export class ProductosInicioComponent implements OnInit {
       this.productosFiltrados = this.productos.filter(producto =>
         producto.nombre_producto.toLowerCase().includes(this.query.toLowerCase())
       );
+      this.searchMode=true;
 
       if (this.productosFiltrados.length === 0) {
         const categoriaProducto = this.productos.find(producto =>
@@ -84,7 +82,7 @@ export class ProductosInicioComponent implements OnInit {
     this.openModal(producto);
       this.searchMode=false;
     }
-  }
+  
 
   openModal(product: Productos): void {
     this.selectedProduct = product;
