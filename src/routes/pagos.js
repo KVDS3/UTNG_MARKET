@@ -73,5 +73,25 @@ router.put('/pagos/:id', (req, res) => {
         res.json(pagoActualizado); // Devuelve el pago actualizado como respuesta
     });
 });
+router.get('/pagos/total/:id_usuario', (req, res) => { 
+    const id_usuario = req.params.id_usuario;
+
+    db.pagos.aggregate([
+        { $match: { id_usuario: id_usuario } },
+        { $group: { _id: null, total: { $sum: '$total' } } }
+    ], (err, result) => {
+        if (err) {
+            console.error('Error al obtener el total de pagos:', err);
+            return res.status(500).json({ message: 'Error interno del servidor' });
+        }
+
+        // Imprimir el resultado antes de responder
+        console.log('Resultado de la agregación:', result);
+
+        const total = result.length > 0 ? result[0].total : 0; 
+        console.log('Total a enviar:', total); // Ver qué total se está enviando
+        res.json({ total });
+    });
+});
 
 module.exports = router;
