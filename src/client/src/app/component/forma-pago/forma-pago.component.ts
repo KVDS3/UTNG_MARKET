@@ -12,7 +12,7 @@ export class FormaPagoComponent implements OnInit {
   @ViewChild('paypal', { static: true }) paypalElement!: ElementRef;
 
   productos = {
-    descripcion: 'si',
+    deescripcion: 'si',
     precio: '0', // Inicialmente a 0 o un valor por defecto
     img: 'img pro'
   };
@@ -45,7 +45,7 @@ export class FormaPagoComponent implements OnInit {
       createOrder: (data: any, actions: any) => {
         return actions.order.create({
           purchase_units: [{
-            description: this.productos.descripcion,
+            description: this.productos.deescripcion,
             amount: {
               currency_code: 'MXN',
               value: this.productos.precio
