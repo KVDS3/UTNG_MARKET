@@ -23,7 +23,7 @@ export class LogInComponent {
         // Guardar el token en sessionStorage
         sessionStorage.setItem('token', token);
         // Redirigir a la página de inicio
-        this.router.navigate(['/home']); // Ajusta la ruta según tu aplicación
+        this.router.navigate(['/inicio']); // Ajusta la ruta según tu aplicación
       },
       (error:any)=>{
         this.loginError=true;

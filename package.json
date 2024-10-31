@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "start": "node src/index.js",
-    "dev": "nodemon src/index.js"
+    "dev": "nodemon src/index.js",
+    "userStart": "cd src/user.microservice && node index.js"
   },
   "keywords": [],
   "author": "",

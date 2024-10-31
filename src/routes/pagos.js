@@ -1,6 +1,6 @@
 const router = require('express').Router();
 const mongojs = require('mongojs');
-const db = mongojs('127.0.0.1/utngMarket', ['pagos']); // Cambia el nombre de la colección a 'pagos'
+const db = mongojs('127.0.0.1/UTNGMARKET', ['pagos']); // Cambia el nombre de la colección a 'pagos'
 
 // Obtener todos los pagos o verificar si existe un pago específico
 router.get('/pagos', (req, res, next) => {

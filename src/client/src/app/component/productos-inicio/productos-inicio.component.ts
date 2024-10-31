@@ -16,9 +16,10 @@ export class ProductosInicioComponent implements OnInit {
   query: string = '';
   cantidadTotal: number = 0;
   productos: Productos[] = [];
-  selectedProduct: Productos | null = null;
-  mensaje: string | null = null;
-  mensajeVisible: boolean = false;
+  selectedProduct: Productos | null = null; // Variable para el producto seleccionado
+  mensaje: string | null = null; // Mensaje de confirmación
+  mensajeVisible: boolean = false; // Para controlar la visibilidad del mensaje
+  searchMode:boolean = false;
   mostrarSugerencias: boolean = false;
 
   constructor(
@@ -51,22 +52,11 @@ export class ProductosInicioComponent implements OnInit {
       this.productosFiltrados = this.productos.filter(producto =>
         producto.nombre_producto.toLowerCase().includes(this.query.toLowerCase())
       );
-
-      if (this.productosFiltrados.length === 0) {
-        const categoriaProducto = this.productos.find(producto =>
-          producto.nombre_producto.toLowerCase().includes(this.query.toLowerCase())
-        )?.categoria;
-
-        if (categoriaProducto) {
-          this.productosFiltrados = this.productos.filter(
-            producto => producto.categoria === categoriaProducto
-          );
-        }
-      }
-      this.mostrarSugerencias = this.productosFiltrados.length > 0;
+      this.searchMode=true;
     } else {
       this.productosFiltrados = this.productos;
       this.mostrarSugerencias = false;
+      this.searchMode=false;
     }
   }
 
@@ -78,7 +68,9 @@ export class ProductosInicioComponent implements OnInit {
 
     this.mostrarSugerencias = false;
     this.openModal(producto);
-  }
+      this.searchMode=false;
+    }
+  
 
   openModal(product: Productos): void {
     this.selectedProduct = product;

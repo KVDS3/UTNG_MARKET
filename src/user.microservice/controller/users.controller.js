@@ -59,7 +59,7 @@ exports.loginUser = async (req, res) => {
 
     // Crear el token JWT
     const token = jwt.sign(
-      { id: usuario._id, tipoUsuario: usuario.tipoUsuario },
+      { id: usuario._id, username:usuario.username, tipoUsuario: usuario.tipoUsuario },
       process.env.JWT_SECRET, // Asegúrate de tener esta variable en tu entorno
       { expiresIn: '1h' } // El token expirará en 1 hora
     );

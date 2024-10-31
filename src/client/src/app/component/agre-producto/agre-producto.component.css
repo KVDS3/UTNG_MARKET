@@ -8,13 +8,98 @@ body {
 
 /* Contenedor principal */
 .container {
-    max-width: 800px;
+    max-width:80vw;
     margin: auto;
     background: #ffffff;
     padding: 20px;
     border-radius: 8px;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
+
+.head {
+    background-color: #3483fa;
+    color: white;
+    width: 100%;
+    padding: 15px;
+    font-family: 'Times New Roman', Times, serif;
+    font-weight: bold;
+    text-align: center;
+    border-radius: 10px 10px 0 0;
+}
+
+/* Estilo del contenedor general */
+.container2 {
+    max-width: 600px;
+    margin: auto;
+    padding: 20px;
+    background-color: #ffffff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+    text-align: center;
+  }
+  
+  .container h2 {
+    font-size: 24px;
+    color: #333;
+    margin-bottom: 20px;
+  }
+  
+  /* Estilo del formulario */
+  .product-form .form-group {
+    margin-bottom: 15px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .product-form label {
+    font-weight: bold;
+    color: #555;
+    margin-bottom: 5px;
+  }
+  
+  .product-form input,
+  .product-form select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+  }
+  
+  /* Botón de envío */
+  .submit-btn {
+    width: 100%;
+    padding: 10px;
+    background-color: #4CAF50;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .submit-btn:hover {
+    background-color: #45a049;
+  }
+  
+  /* Vista previa de la imagen */
+  .image-preview img {
+    width: 200px;
+    height: auto;
+    margin-top: 10px;
+    border-radius: 5px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+  }
+  
+  /* Mensaje de error */
+  .alert-danger {
+    color: #ff0000;
+    font-weight: bold;
+    margin-top: 10px;
+  }
+  
 
 /* Títulos */
 h2 {
@@ -66,7 +151,6 @@ button:hover {
 table {
     width: 100%;
     border-collapse: collapse;
-    margin-top: 20px;
 }
 
 th, td {
@@ -113,3 +197,35 @@ td button:nth-child(3) {
 td button:nth-child(3):hover {
     background-color: #e0a800;
 }
+
+/* Estilo del cuadro de carga de archivos */
+.file-upload {
+    margin: auto;
+    width: 200px;
+    height: 200px;
+    border: 2px dashed #ccc;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: border-color 0.3s ease;
+    color: #888;
+    font-size: 48px;
+    font-weight: bold;
+    position: relative;
+    overflow: hidden; /* Asegura que la imagen se ajuste al contenedor */
+  }
+  
+  .file-upload:hover {
+    border-color: #4CAF50;
+    color: #4CAF50;
+  }
+  
+  /* Oculta el signo "+" cuando hay una vista previa de imagen */
+  .file-upload img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  

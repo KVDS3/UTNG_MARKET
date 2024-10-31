@@ -4,6 +4,7 @@ import { CarritoService } from '../../services/carrito.service';
 import { Productos } from '../../models/productos';
 import { HttpClient } from '@angular/common/http';
 import { Carrito } from '../../models/carrito';
+import { jwtDecode } from 'jwt-decode';
 
 @Component({
   selector: 'app-agre-producto',
@@ -17,11 +18,22 @@ export class AgreProductoComponent implements OnInit {
   selectedFile: File | null = null;  
   previewUrl: string | ArrayBuffer | null = null;
   errorMessage: string | null = null; // Variable para el mensaje de error
+  vendedor:string='';
+  id_vendedor:string='';
+  token: string | null ='';
 
   constructor(private productosService: ProductosService, private carritoService: CarritoService, private http: HttpClient) {}
 
   ngOnInit(): void {
     this.listarProductos();
+    this.token =sessionStorage.getItem('token')
+    if (this.token) {
+      const decodedToken: any = jwtDecode(this.token);
+      
+      this.id_vendedor=decodedToken.id
+      this.vendedor = decodedToken.username; // Asume que el campo vendedor está en el token
+      console.log(this.vendedor); // Opcional: Verifica los datos decodificados
+    }
   }
 
   listarProductos(): void {
@@ -74,9 +86,10 @@ export class AgreProductoComponent implements OnInit {
     } else {
         this.errorMessage = null; // Limpiar el mensaje de error si todo está correcto
     }
+    console.log(this.id_vendedor)
 
     const formData = new FormData();
-    formData.append('id_vendedor', this.producto.id_vendedor);
+    formData.append('id_vendedor', this.id_vendedor);
     formData.append('nombre_producto', this.producto.nombre_producto);
     formData.append('cantidad_dispo', this.producto.cantidad_dispo.toString());
     formData.append('categoria', this.producto.categoria);
@@ -147,80 +160,24 @@ export class AgreProductoComponent implements OnInit {
     }
   }
 
-  agregarAlCarrito(producto: Productos): void {
-    // Verificación de campos en el producto
-    if (!producto._id || !producto.id_vendedor || !producto.nombre_producto || 
-        producto.cantidad_dispo == null || 
-        producto.precio == null || 
-        !producto.descripcion || 
-        !producto.fecha_publicacion || 
-        !producto.categoria) {
-        console.error('El producto tiene campos faltantes o indefinidos:', producto);
-        return; // Detener si hay campos faltantes
+  onDragOver(event: DragEvent) {
+    event.preventDefault(); // Evita que el navegador abra la imagen
+  }
+  
+  onDrop(event: DragEvent) {
+    event.preventDefault();
+    const file = event.dataTransfer?.files[0];
+    if (file && file.type.startsWith('image/')) {
+      this.handleFile(file);
     }
-
-    // Crear el objeto del producto para el carrito
-    const carritoItem = {
-        id_producto: producto._id,
-        id_vendedor: producto.id_vendedor,
-        nombre_producto: producto.nombre_producto,
-        cantidad_dispo: producto.cantidad_dispo, // Inicializar con 1 si es el primer producto agregado
-        precio: Number(producto.precio), // Asegúrate de que sea un número
-        descripcion: producto.descripcion,
-        fecha_publicacion: new Date(producto.fecha_publicacion), // Convertir a fecha
-        categoria: producto.categoria,
-        imagen: producto.imagen_url || '' // Asignar imagen_url o cadena vacía si no existe
+  }
+  
+  handleFile(file: File) {
+    const reader = new FileReader();
+    reader.onload = () => {
+      this.previewUrl = reader.result as string;
     };
-
-    console.log('Carrito Item a agregar:', carritoItem); // Verificar el objeto antes de enviarlo
-
-    // Obtener el carrito existente del usuario
-    this.carritoService.getCarritos().subscribe(carritos => {
-        const carritoExistente = carritos.find(carrito => carrito.id_usuario === 'usuario123');
-
-        if (carritoExistente) {
-            // Comprobar si el producto ya existe en el carrito
-            const productoExistente = carritoExistente.productos.find(item => item.id_producto === carritoItem.id_producto);
-
-            if (productoExistente) {
-                // Si el producto ya está en el carrito, actualizar su cantidad
-                productoExistente.cantidad_dispo += carritoItem.cantidad_dispo;
-                console.log('Cantidad actualizada para el producto existente:', productoExistente);
-            } else {
-                // Si el producto no existe, agregarlo al carrito
-                carritoExistente.productos.push(carritoItem);
-                console.log('Producto agregado al carrito existente:', carritoExistente.productos);
-            }
-
-            // Actualizar el carrito existente
-            this.carritoService.updateCarrito(carritoExistente).subscribe(
-                response => {
-                    console.log('Carrito actualizado con éxito', response);
-                },
-                error => {
-                    console.error('Error al actualizar el carrito', error);
-                }
-            );
-        } else {
-            // Crear un nuevo carrito si no existe
-            const nuevoCarrito = new Carrito(
-                'usuario123',
-                'activo',
-                new Date(),
-                [carritoItem] // Agregar el nuevo producto
-            );
-
-            this.carritoService.createCarrito(nuevoCarrito).subscribe(
-                response => {
-                    console.log('Carrito creado y producto agregado', response);
-                },
-                error => {
-                    console.error('Error al crear el carrito', error);
-                }
-            );
-        }
-    }, error => {
-        console.error('Error al obtener carritos:', error);
-    });
-}
+    reader.readAsDataURL(file);
+  }
+  
 }

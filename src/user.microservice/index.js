@@ -4,16 +4,18 @@ const usuarioController = require('./controller/users.controller');
 const morgan= require('morgan');
 const cors = require('cors');
 require('dotenv').config();
+const enviarCorreoPedido = require('./controller/functions.test.js');
 
 const app = express();
 app.use(express.urlencoded({ extended: true }));
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3001;
 
 // Middleware
 app.use(cors());
 app.use(express.json());
 app.use(morgan('dev'))
 connectDB();
+
 
 // Rutas de Usuario
 app.post('/usuarios', usuarioController.registrarUsuario); // Crear usuario
