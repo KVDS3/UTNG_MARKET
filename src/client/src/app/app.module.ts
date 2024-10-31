@@ -15,7 +15,7 @@ import { ConfirmPagoComponent } from './component/confirm-pago/confirm-pago.comp
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AgreDireccionComponent } from './component/agre-direccion/agre-direccion.component';
 import { ProductosInicioComponent } from './component/productos-inicio/productos-inicio.component';
-import { SearchBarComponent } from './component/search-bar/search-bar.component';
+import { ProductosFiltroComponent } from './component/productos-filtro/productos-filtro.component';
 
 @NgModule({
   declarations: [
@@ -29,7 +29,7 @@ import { SearchBarComponent } from './component/search-bar/search-bar.component'
     ConfirmPagoComponent,
     AgreDireccionComponent,
     ProductosInicioComponent,
-    SearchBarComponent,
+    ProductosFiltroComponent,
     
     
   ],

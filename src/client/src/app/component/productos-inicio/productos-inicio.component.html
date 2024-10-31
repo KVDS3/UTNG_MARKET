@@ -20,6 +20,14 @@
         </div>
       </div>
     </div>
+    <!-- Opciones de autocompletado -->
+    <div class="autocomplete-options" *ngIf="query && productosFiltrados.length > 0">
+      <ul>
+        <li *ngFor="let producto of productosFiltrados" (click)="selectProducto(producto)">
+          {{ producto.nombre_producto }}
+        </li>
+      </ul>
+    </div>
   </header>
 
   <div *ngIf="searchMode" class="product-list-search">
@@ -34,6 +42,36 @@
       <div>
         <button class="add-to-cart" (click)="agregarAlCarrito(product)">Agregar al carrito</button>
       </div>
+  <div class="categories-header">
+    <h2>Categorías</h2>
+  </div>
+  <div class="banner">
+    <div class="banner-content"></div>
+    <div class="banner-images">
+      <img
+        src="https://lh5.googleusercontent.com/proxy/d-AAah5u7t2U19JMZ1x2sNSDiMRlOGCtX4fSnXC37SeO36p4IPo4sfEV0hEIsVdEaw5l9zUo8_JVHHIE3NJbugxSGl2_3p6R92kL9HvuyXcZRjZb"
+        alt="Tecnologia y Accesorios"
+        title="Tecnologia y Accesorios"
+        (click)="navigateToFilter('Tecnologia y Accesorios')"
+      />
+      <img
+        src="https://regalosparacientificos.com/wp-content/uploads/2019/09/material-para-ir-a-la-universidad-1.jpg"
+        alt="Material de Estudio y Papelería"
+        title="Material de Estudio y Papelería"
+        (click)="navigateToFilter('Material de Estudio y Papeleria')"
+      />
+      <img
+        src="https://teefactory.es/mds/publicitario/img/merchandising/comprar-merchandising-personalizado2.jpg"
+        alt="Ropa y Merchandising Universitario"
+        title="Ropa y Merchandising Universitario"
+        (click)="navigateToFilter('Ropa y Merchandising universitario')"
+      />
+      <img
+        src="https://www.topkit.es/blog/wp-content/uploads/2015/09/muebles-oficina.jpg"
+        alt="Mobiliario y Organización"
+        title="Mobiliario y Organización"
+        (click)="navigateToFilter('Mobiliario y Organizacion')"
+      />
     </div>
   </div>
    
@@ -125,4 +163,3 @@
       {{ mensaje }}
     </div>
   </section>
-</body>
