@@ -9,6 +9,7 @@ import { LogInComponent } from './component/log-in/log-in.component';
 import { FormaPagoComponent } from './component/forma-pago/forma-pago.component';
 import { ConfirmPagoComponent } from './component/confirm-pago/confirm-pago.component';
 import { AgreDireccionComponent } from './component/agre-direccion/agre-direccion.component';
+import { ProductosInicioComponent } from './component/productos-inicio/productos-inicio.component';
 
 
 const routes: Routes = [
@@ -49,6 +50,10 @@ const routes: Routes = [
   {
     path : 'Direccion',
     component : AgreDireccionComponent
+  },
+  {
+    path : 'inicio',
+    component : ProductosInicioComponent
   }
 ];
 
