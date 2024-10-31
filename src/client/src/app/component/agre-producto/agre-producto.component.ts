@@ -5,15 +5,16 @@ import { Productos } from '../../models/productos';
 import { HttpClient } from '@angular/common/http';
 import { Carrito } from '../../models/carrito';
 import { jwtDecode } from 'jwt-decode';
-
+import { ProductosService } from '../../services/agre-producto.service'; // Importa tu servicio
+import { Productos } from '../../models/productos'; // Modelo de producto
 @Component({
   selector: 'app-agre-producto',
   templateUrl: './agre-producto.component.html',
-  styleUrls: ['./agre-producto.component.css']
+  styleUrl: './agre-producto.component.css'
 })
 export class AgreProductoComponent implements OnInit {
   productos: Productos[] = [];
-  producto: Productos = new Productos('', '', 0, 0, '', new Date(), '');
+  producto: Productos = new Productos('', '', 0, 0, '', new Date(), ''); // Producto inicial vacío
   editando: boolean = false;
   selectedFile: File | null = null;  
   previewUrl: string | ArrayBuffer | null = null;
@@ -22,7 +23,7 @@ export class AgreProductoComponent implements OnInit {
   id_vendedor:string='';
   token: string | null ='';
 
-  constructor(private productosService: ProductosService, private carritoService: CarritoService, private http: HttpClient) {}
+  constructor(private productosService: ProductosService) {}
 
   ngOnInit(): void {
     this.listarProductos();
@@ -36,55 +37,25 @@ export class AgreProductoComponent implements OnInit {
     }
   }
 
+  // Obtener todos los productos
   listarProductos(): void {
-    this.productosService.getProductos().subscribe(
-      (data: Productos[]) => {
-        this.productos = data.map(producto => ({
-          ...producto,
-          imagen_url: `http://localhost:3000${producto.imagen_url}`
-        }));
-        console.log(this.productos);
-      },
-      error => {
-        console.error('Error al obtener productos', error);
-      }
-    );
+    this.productosService.getProductos().subscribe((data: Productos[]) => {
+      this.productos = data;
+    });
   }
 
-  onFileSelected(event: any): void {
-    this.selectedFile = event.target.files[0];
-
-    if (this.selectedFile) {
-      const reader = new FileReader();
-      reader.readAsDataURL(this.selectedFile);
-      reader.onload = () => {
-        this.previewUrl = reader.result;
-      };
-    } else {
-      this.previewUrl = null;
-    }
-  }
-
-  resetFileInput(): void {
-    const fileInput: HTMLInputElement = document.getElementById('imagen') as HTMLInputElement;
-    if (fileInput) {
-      fileInput.value = '';
-    }
-  }
-
+  // Crear o actualizar un producto
   onSubmit(): void {
-    // Validar que los campos obligatorios estén llenos
-    if (
-        !this.producto.nombre_producto || 
-        !this.producto.cantidad_dispo || 
-        !this.producto.categoria || 
-        !this.producto.precio || 
-        !this.selectedFile // Agregamos la validación para el archivo de imagen
-    ) {
-        this.errorMessage = 'Por favor, complete todos los campos obligatorios, incluyendo la imagen.';
-        return; // Detener la ejecución si hay campos vacíos
+    if (this.editando) {
+      this.productosService.updateProducto(this.producto).subscribe(() => {
+        this.listarProductos();
+        this.resetForm();
+      });
     } else {
-        this.errorMessage = null; // Limpiar el mensaje de error si todo está correcto
+      this.productosService.createProducto(this.producto).subscribe(() => {
+        this.listarProductos();
+        this.resetForm();
+      });
     }
     console.log(this.id_vendedor)
 
@@ -128,14 +99,25 @@ export class AgreProductoComponent implements OnInit {
       );
     }
 }
+  }
 
+  // Editar producto
+  editarProducto(producto: Productos): void {
+    this.producto = { ...producto }; // Clonar para editar sin modificar directamente la lista
+    this.editando = true;
+  }
 
+  // Eliminar producto
+  eliminarProducto(_id: string | undefined): void {
+    this.productosService.deleteProducto(_id!).subscribe(() => {
+      this.listarProductos();
+    });
+  }
+
+  // Limpiar el formulario
   resetForm(): void {
     this.producto = new Productos('', '', 0, 0, '', new Date(), '');
     this.editando = false;
-    this.selectedFile = null;
-    this.previewUrl = null;
-    this.resetFileInput();
   }
 
   editarProducto(producto: Productos): void {
@@ -180,4 +162,3 @@ export class AgreProductoComponent implements OnInit {
     reader.readAsDataURL(file);
   }
   
-}
