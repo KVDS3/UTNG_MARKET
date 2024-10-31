@@ -446,3 +446,39 @@ header {
 .modal-details .description {
   margin-top: 30px;    /* Espacio encima solo del párrafo de descripción */
 }
+
+.product-list-search {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 80%;
+  margin: auto;
+}
+
+.product-item-list {
+  display: flex;
+  align-items: center;
+  background-color: #f9f9f9;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 16px;
+  margin: 10px 0;
+  width: 100%;
+}
+
+.product-image {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin-right: 16px;
+}
+
+.product-info {
+  display: flex;
+  flex-direction: column;
+  width: calc(100% - 120px);
+}
+
+
+

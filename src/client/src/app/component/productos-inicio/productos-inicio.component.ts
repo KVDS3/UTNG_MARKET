@@ -18,6 +18,7 @@ export class ProductosInicioComponent implements OnInit {
   selectedProduct: Productos | null = null; // Variable para el producto seleccionado
   mensaje: string | null = null; // Mensaje de confirmación
   mensajeVisible: boolean = false; // Para controlar la visibilidad del mensaje
+  searchMode:boolean = false;
 
   constructor(private productosService: ProductosService, private carritoService: CarritoService,private router: Router) { }
 
@@ -46,8 +47,9 @@ export class ProductosInicioComponent implements OnInit {
       this.productosFiltrados = this.productos.filter(producto =>
         producto.nombre_producto.toLowerCase().includes(this.query.toLowerCase())
       );
+      this.searchMode=true;
     } else {
-      this.productosFiltrados = this.productos;
+      this.searchMode=false;
     }
   }
 

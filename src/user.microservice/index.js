@@ -16,17 +16,6 @@ app.use(express.json());
 app.use(morgan('dev'))
 connectDB();
 
-// Suponiendo que el producto es este objeto
-const producto = {
-  id: '1234567890abcdef12345678',
-  nombre_producto: 'Producto de ejemplo',
-  cantidad_dispo: 10,
-  precio: 100
-};
-
-// Llamada a la función para enviar el correo
-enviarCorreoPedido('4181180400d@gmail.com', producto);
-
 
 // Rutas de Usuario
 app.post('/usuarios', usuarioController.registrarUsuario); // Crear usuario
