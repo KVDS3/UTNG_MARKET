@@ -1,10 +1,13 @@
+import { RfcService } from './../../services/rfc.service';
 import { Component, OnInit } from '@angular/core';
 import { UsuariosService } from '../../services/usuarios.service';
 import { Usuarios } from '../../models/usuarios';
+import { Router } from '@angular/router';
+
 @Component({
   selector: 'app-usuarios',
   templateUrl: './usuarios.component.html',
-  styleUrl: './usuarios.component.css'
+  styleUrls: ['./usuarios.component.css'],
 })
 export class UsuariosComponent implements OnInit {
   // Propiedades para el formulario de usuario
@@ -12,49 +15,117 @@ export class UsuariosComponent implements OnInit {
   correoElectronico: string = '';
   telefono: string = '';
   direccion: string = '';
+  universidad: string = '';
+  areaAcademica: string = '';
+  giroComercial: string = '';
+  representanteLegal: string = '';
   rol: string = '';
   fechaRegistro: string = ''; // Lo manejaremos como string para el formulario
-  usuarioSeleccionado: Usuarios | null = null;
+  rfc: string = '';
+  numeroControl: string = '';
+  rfcValido: boolean | null = null;
+  rfcExiste: boolean | null = null;
+  userType: string = 'student'; // Valor por defecto
+  username: string = '';
+  password: string = '';
+  formValid: boolean = false;
+  password2: string = '';
 
-  // Almacenar la lista de usuarios
-  usuarios: Usuarios[] = [];
+  constructor(
+    private usuariosService: UsuariosService,
+    private rfcService: RfcService,
+    private router: Router
+  ) {}
 
-  constructor(private usuariosService: UsuariosService) {}
+  ngOnInit(): void {}
 
-  ngOnInit(): void {
-    this.getUsuarios();
+  isVisibleFieldValid(): boolean {
+    // Validar campos comunes
+    const commonFieldsValid =
+      this.nombre != '' &&
+      this.correoElectronico != '' &&
+      this.telefono != '' &&
+      this.direccion != '';
+
+    // Validar campos adicionales según el tipo de usuario
+    if (this.rol === 'student') {
+      return (
+        commonFieldsValid &&
+        this.numeroControl != '' &&
+        this.universidad != '' &&
+        this.areaAcademica != ''
+      );
+    } else if (this.rol === 'shop') {
+      return (
+        commonFieldsValid &&
+        (this.rfcValido as boolean) &&
+        this.giroComercial != '' &&
+        this.representanteLegal != ''
+      );
+    }
+    return commonFieldsValid;
   }
 
-  // Obtener la lista de usuarios
-  getUsuarios(): void {
-    this.usuariosService.getUsuarios()
-      .subscribe(usuarios => this.usuarios = usuarios);
+  checkForm() {
+    if (!this.validateRFC()) {
+      return;
+    }
+    this.formValid = true;
   }
 
-  // Lógica del formulario para agregar o actualizar usuarios
+  // Lógica del formulario para registrar usuarios
   onSubmit(event: Event) {
-    event.preventDefault();
-    
-    if (this.nombre && this.correoElectronico && this.telefono && this.direccion && this.rol && this.fechaRegistro) {
-      if (this.usuarioSeleccionado) {
-        this.actualizarUsuario(this.usuarioSeleccionado);
-      } else {
-        this.agregarUsuario();
-      }
+    event.preventDefault(); // Evitar el comportamiento por defecto del formulario
+    if (
+      this.nombre &&
+      this.correoElectronico &&
+      this.telefono &&
+      this.direccion &&
+      this.rol
+    ) {
+      const userData = {
+        nombre: this.nombre,
+        correoElectronico: this.correoElectronico,
+        telefono: this.telefono,
+        direccion: this.direccion,
+        tipoUsuario: this.rol, // Cambié 'rol' a 'tipoUsuario' para alinearlo con el backend
+        password: this.password, // Asegúrate de manejar la contraseña adecuadamente
+        username: this.username,
+        estudiante:
+          this.rol === 'student'
+            ? {
+                numeroControl: this.numeroControl,
+                universidad: this.universidad,
+                areaAcademica: this.areaAcademica,
+              }
+            : undefined,
+        tienda:
+          this.rol === 'shop'
+            ? {
+                rfc: this.rfc,
+                giroComercial: this.giroComercial,
+                representanteLegal: this.representanteLegal,
+              }
+            : undefined,
+      };
+      this.agregarUsuario(userData);
     } else {
-      console.error('Por favor, complete todos los campos.');
+      console.error(
+        'Por favor, complete todos los campos y asegúrese de que el RFC sea válido.'
+      );
     }
   }
 
   // Agregar un nuevo usuario
-  agregarUsuario(): void {
-    const nuevoUsuario: Usuarios = new Usuarios(this.nombre, this.correoElectronico, this.telefono, this.direccion, this.rol, new Date(this.fechaRegistro));
-
+  agregarUsuario(nuevoUsuario: any): void {
+    if (!this.isVisibleFieldValid()) {
+      return;
+    }
     this.usuariosService.addUsuario(nuevoUsuario).subscribe(
       (res) => {
         console.log('Usuario agregado correctamente:', res);
         this.limpiarFormulario();
-        this.getUsuarios();
+        this.router.navigate(['./LogIn']);
       },
       (error) => {
         console.error('Error al agregar el usuario:', error);
@@ -62,49 +133,31 @@ export class UsuariosComponent implements OnInit {
     );
   }
 
-  // Actualizar un usuario existente
-  actualizarUsuario(usuario: Usuarios): void {
-    const usuarioActualizado: Usuarios = new Usuarios(this.nombre, this.correoElectronico, this.telefono, this.direccion, this.rol, new Date(this.fechaRegistro), usuario._id);
+  validated: boolean = false;
+  // Validar RFC
+  validateRFC() {
+    console.log('................');
+    const rfcPattern = /^[A-Z0-9]{12}$/;
+    this.rfcValido = rfcPattern.test(this.rfc);
 
-    this.usuariosService.updateUsuario(usuarioActualizado).subscribe(
-      (res) => {
-        console.log('Usuario actualizado correctamente:', res);
-        this.limpiarFormulario();
-        this.getUsuarios();
-      },
-      (error) => {
-        console.error('Error al actualizar el usuario:', error);
-      }
-    );
-  }
-
-  // Eliminar un usuario
-  borrarUsuario(usuarios: Usuarios): void {
-    if (confirm('¿Estás seguro de que deseas eliminar este usuario?')) {
-      this.usuariosService.deleteUsuario(usuarios._id!).subscribe(
-        () => {
-          console.log('Usuario eliminado correctamente');
-          this.getUsuarios();
+    // Implementa tu lógica aquí para verificar si el RFC ya existe
+    // Asumiendo que tienes un método que consulta el RFC
+    if (this.rfcValido) {
+      this.rfcService.getRFC(this.rfc).subscribe(
+        (data) => {
+          console.log(data['exists']);
+          this.rfcExiste = data['exists']; // Ajusta según la estructura de tu respuesta
         },
         (error) => {
-          console.error('Error al eliminar el usuario:', error);
+          console.error('Error al consultar el RFC:', error);
         }
       );
     }
+    this.validated = true;
+    return this.rfcExiste;
   }
 
-  // Cargar los datos del usuario en el formulario para editar
-  editarUsuario(usuario: Usuarios): void {
-    this.nombre = usuario.nombre;
-    this.correoElectronico = usuario.correoElectronico;
-    this.telefono = usuario.telefono;
-    this.direccion = usuario.direccion;
-    this.rol = usuario.rol;
-    this.fechaRegistro = usuario.fechaRegistro.toISOString().substring(0, 10); // Formato YYYY-MM-DD para el input de fecha
-    this.usuarioSeleccionado = usuario;
-  }
-
-  // Limpiar el formulario después de agregar/editar
+  // Limpiar el formulario después de agregar
   limpiarFormulario(): void {
     this.nombre = '';
     this.correoElectronico = '';
@@ -112,6 +165,30 @@ export class UsuariosComponent implements OnInit {
     this.direccion = '';
     this.rol = '';
     this.fechaRegistro = '';
-    this.usuarioSeleccionado = null;
+    this.rfc = '';
+    this.universidad = '';
+    this.areaAcademica = '';
+    this.giroComercial = '';
+    this.representanteLegal = '';
   }
+
+  showPasswordWarning = false;
+  showConfirmPasswordWarning = false;
+
+  validatePassword() {
+    this.showPasswordWarning = true;
+  }
+
+  validateConfirmPassword() {
+    this.showConfirmPasswordWarning = true;
+  }
+
+  showNombreWarning: boolean = false;
+  showCorreoWarning: boolean = false;
+  showTelefonoWarning: boolean = false;
+  showDireccionWarning: boolean = false;
+  showRolWarning: boolean = false;
+  showControlNumberWarning: boolean = false;
+  showRFCWarning: boolean = false;
+  showUsernameWarning: boolean = false;
 }
