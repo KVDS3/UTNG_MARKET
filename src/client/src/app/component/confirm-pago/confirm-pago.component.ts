@@ -27,7 +27,7 @@ export class ConfirmPagoComponent implements OnInit {
     this.carritoService.getCarritos().subscribe(carritos => {
       if (carritos.length > 0) {
         this.carrito = carritos[0]; // Asegúrate de que hay al menos un carrito
-        console.log("Carrito:", this.carrito); // Verifica el contenido del carrito
+        console.log("Carrito", this.carrito); // Verifica el contenido del carrito
 
         // Inicializa la cantidad para cada producto en 1
         this.carrito.productos.forEach(producto => {
