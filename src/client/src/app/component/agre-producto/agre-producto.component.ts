@@ -1,6 +1,6 @@
+import { CarritoService } from './../../services/carrito.service';
 import { Component, OnInit } from '@angular/core';
 import { ProductosService } from '../../services/agre-producto.service';
-import { CarritoService } from '../../services/carrito.service';
 import { Productos } from '../../models/productos';
 import { HttpClient } from '@angular/common/http';
 import { Carrito } from '../../models/carrito';
