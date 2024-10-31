@@ -24,6 +24,8 @@ export class PagoService {
   actualizarPago(id: string, nuevoTotal: number): Observable<any> {
     return this.http.put<any>(`${this.apiUrl}/${id}`, { total: nuevoTotal });
 }
-  
+obtenerTotal(): Observable<number> {
+  return this.http.get<number>(`${this.apiUrl}/total`);
+}
   
 }

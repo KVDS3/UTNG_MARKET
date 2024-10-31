@@ -14,6 +14,7 @@ import { FormaPagoComponent } from './component/forma-pago/forma-pago.component'
 import { ConfirmPagoComponent } from './component/confirm-pago/confirm-pago.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AgreDireccionComponent } from './component/agre-direccion/agre-direccion.component';
+import { ProductosInicioComponent } from './component/productos-inicio/productos-inicio.component';
 
 @NgModule({
   declarations: [
@@ -26,6 +27,7 @@ import { AgreDireccionComponent } from './component/agre-direccion/agre-direccio
     FormaPagoComponent,
     ConfirmPagoComponent,
     AgreDireccionComponent,
+    ProductosInicioComponent,
     
     
   ],
