@@ -3,6 +3,7 @@ import { CarritoService } from '../../services/carrito.service';
 import { Carrito } from '../../models/carrito';
 import { PagoService } from '../../services/pago.service';
 import { Pago } from '../../models/pago';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-confirm-pago',
@@ -19,7 +20,7 @@ export class ConfirmPagoComponent implements OnInit {
   cantidadSeleccionada: { [id_producto: string]: number } = {};
   producto: any;
 
-  constructor(private carritoService: CarritoService, private pagoService: PagoService) {}
+  constructor(private router: Router,private carritoService: CarritoService, private pagoService: PagoService) {}
 
   ngOnInit() {
     // Obtener todos los carritos
@@ -61,5 +62,8 @@ export class ConfirmPagoComponent implements OnInit {
         this.isUsuario123 = false; // Asegúrate de que sea false en caso de error
       }
     );
+  }
+  confirmarCompra(): void {
+    this.router.navigate(['/formaPagos']); // Reemplaza '/ruta-deseada' con la ruta a la que quieres redirigir
   }
 }
