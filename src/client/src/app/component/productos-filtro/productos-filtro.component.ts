@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router'; // Asegúrate de importar ActivatedRoute
+import { ActivatedRoute } from '@angular/router';
 import { ProductosService } from '../../services/agre-producto.service';
 import { CarritoService } from '../../services/carrito.service';
 import { Productos } from '../../models/productos';
@@ -8,7 +8,7 @@ import { Carrito } from '../../models/carrito';
 @Component({
   selector: 'app-productos-filtro',
   templateUrl: './productos-filtro.component.html',
-  styleUrls: ['./productos-filtro.component.css' ] // Corrige 'styleUrl' a 'styleUrls'
+  styleUrls: ['./productos-filtro.component.css']
 })
 export class ProductosFiltroComponent implements OnInit {
   categoria: string = '';
@@ -23,16 +23,18 @@ export class ProductosFiltroComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private productosService: ProductosService,
-    private carritoService: CarritoService // Asegúrate de inyectar el carritoService
+    private carritoService: CarritoService
   ) {}
 
   ngOnInit(): void {
+    // Obtiene la categoría desde los parámetros de la URL y carga los productos correspondientes.
     this.route.paramMap.subscribe(params => {
       this.categoria = params.get('categoria') || '';
       this.obtenerProductosPorCategoria(this.categoria);
     });
   }
 
+  // Obtiene productos de una categoría específica y establece la URL de las imágenes.
   obtenerProductosPorCategoria(categoria: string) {
     this.productosService.getProductos().subscribe((productos: Productos[]) => {
       this.productosFiltrados = productos
@@ -44,6 +46,7 @@ export class ProductosFiltroComponent implements OnInit {
     });
   }
 
+  // Muestra un mensaje temporal en la pantalla.
   mostrarMensaje() {
     this.mensajeVisible = true;
 
@@ -53,17 +56,20 @@ export class ProductosFiltroComponent implements OnInit {
     }, 2000);
   }
 
+  // Abre un modal para ver los detalles del producto seleccionado.
   openModal(product: Productos): void {
     this.selectedProduct = product;
     console.log('Modal abierto para el producto:', this.selectedProduct);
-}
+  }
 
-
+  // Cierra el modal.
   closeModal() {
     this.selectedProduct = null;
   }
 
+  // Agrega un producto al carrito, creando o actualizando el carrito según corresponda.
   agregarAlCarrito(producto: Productos): void {
+    // Verifica que el producto tenga todos los campos necesarios.
     if (!producto._id || !producto.id_vendedor || !producto.nombre_producto || 
         producto.cantidad_dispo == null || 
         producto.precio == null || 
@@ -74,11 +80,12 @@ export class ProductosFiltroComponent implements OnInit {
         return; 
     }
 
+    // Crear el item del carrito con la cantidad inicial en 1.
     const carritoItem = {
         id_producto: producto._id,
         id_vendedor: producto.id_vendedor,
         nombre_producto: producto.nombre_producto,
-        cantidad_dispo: 1, // Inicializar con 1
+        cantidad_dispo: 1,
         precio: Number(producto.precio),
         descripcion: producto.descripcion,
         fecha_publicacion: new Date(producto.fecha_publicacion),
@@ -88,10 +95,12 @@ export class ProductosFiltroComponent implements OnInit {
 
     console.log('Carrito Item a agregar:', carritoItem);
 
+    // Verifica si ya existe un carrito para el usuario "usuario123".
     this.carritoService.getCarritos().subscribe((carritos: any[]) => {
         const carritoExistente = carritos.find(carrito => carrito.id_usuario === 'usuario123');
 
         if (carritoExistente) {
+            // Si el carrito existe, verifica si el producto ya está en el carrito.
             const productoExistente = carritoExistente.productos.find((item: { id_producto: string; }) => item.id_producto === carritoItem.id_producto);
             if (productoExistente) {
                 productoExistente.cantidad_dispo += carritoItem.cantidad_dispo;
@@ -101,6 +110,7 @@ export class ProductosFiltroComponent implements OnInit {
                 console.log('Producto agregado al carrito existente:', carritoExistente.productos);
             }
 
+            // Actualiza el carrito en el servicio.
             this.carritoService.updateCarrito(carritoExistente).subscribe(
                 (response: any) => {
                     console.log('Carrito actualizado con éxito', response);
@@ -112,6 +122,7 @@ export class ProductosFiltroComponent implements OnInit {
                 }
             );
         } else {
+            // Si no existe un carrito, crea uno nuevo con el producto.
             const nuevoCarrito = new Carrito('usuario123', 'activo', new Date(), [carritoItem]);
             this.carritoService.createCarrito(nuevoCarrito).subscribe(
                 (response: any) => {

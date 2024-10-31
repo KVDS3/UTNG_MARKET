@@ -2,8 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { ProductosService } from '../../services/agre-producto.service';
 import { CarritoService } from '../../services/carrito.service';
 import { Productos } from '../../models/productos';
-import { Carrito } from '../../models/carrito';
 import { Router } from '@angular/router';
+import { Carrito } from '../../models/carrito';
+
 
 @Component({
   selector: 'app-productos-inicio',
@@ -15,10 +16,10 @@ export class ProductosInicioComponent implements OnInit {
   query: string = '';
   cantidadTotal: number = 0;
   productos: Productos[] = [];
-  selectedProduct: Productos | null = null; // Variable para el producto seleccionado
-  mensaje: string | null = null; // Mensaje de confirmación
-  mensajeVisible: boolean = false; // Para controlar la visibilidad del mensaje
-  mostrarSugerencias: boolean = false; // Para mostrar las sugerencias
+  selectedProduct: Productos | null = null;
+  mensaje: string | null = null;
+  mensajeVisible: boolean = false;
+  mostrarSugerencias: boolean = false;
 
   constructor(
     private productosService: ProductosService,
@@ -37,8 +38,7 @@ export class ProductosInicioComponent implements OnInit {
           ...producto,
           imagen_url: `http://localhost:3000${producto.imagen_url}`
         }));
-        this.productosFiltrados = this.productos; // Inicializamos productosFiltrados con todos los productos
-        console.log(this.productos);
+        this.productosFiltrados = this.productos;
       },
       error => {
         console.error('Error al obtener productos', error);
@@ -51,34 +51,44 @@ export class ProductosInicioComponent implements OnInit {
       this.productosFiltrados = this.productos.filter(producto =>
         producto.nombre_producto.toLowerCase().includes(this.query.toLowerCase())
       );
-      this.mostrarSugerencias = this.productosFiltrados.length > 0; // Mostrar sugerencias si hay coincidencias
+
+      if (this.productosFiltrados.length === 0) {
+        const categoriaProducto = this.productos.find(producto =>
+          producto.nombre_producto.toLowerCase().includes(this.query.toLowerCase())
+        )?.categoria;
+
+        if (categoriaProducto) {
+          this.productosFiltrados = this.productos.filter(
+            producto => producto.categoria === categoriaProducto
+          );
+        }
+      }
+      this.mostrarSugerencias = this.productosFiltrados.length > 0;
     } else {
       this.productosFiltrados = this.productos;
-      this.mostrarSugerencias = false; // Ocultar sugerencias si el campo está vacío
+      this.mostrarSugerencias = false;
     }
   }
 
-  seleccionarProducto(producto: Productos): void {
-    this.query = producto.nombre_producto; // Asigna el nombre del producto al campo de búsqueda
-    this.mostrarSugerencias = false; // Oculta las sugerencias
-  }
   selectProducto(producto: Productos): void {
-    this.query = producto.nombre_producto; // Asigna el nombre del producto al campo de búsqueda
-    this.productosFiltrados = []; // Limpia las opciones después de seleccionar
-    // Aquí podrías añadir más lógica, como abrir un modal o navegar a la página del producto
-    this.openModal(producto); // Ejemplo: abrir el modal del producto seleccionado
+    this.query = producto.nombre_producto;
+    this.productosFiltrados = this.productos.filter(
+      p => p.nombre_producto.toLowerCase() === producto.nombre_producto.toLowerCase() || p.categoria === producto.categoria
+    );
+
+    this.mostrarSugerencias = false;
+    this.openModal(producto);
   }
 
   openModal(product: Productos): void {
-    this.selectedProduct = product; // Asigna el producto seleccionado a la variable selectedProduct
+    this.selectedProduct = product;
   }
 
-  closeModal() {
-    this.selectedProduct = null; // Esto asegura que el modal se oculte
+  closeModal(): void {
+    this.selectedProduct = null;
   }
 
   agregarAlCarrito(producto: Productos): void {
-    // Verificación de campos en el producto
     if (!producto._id || !producto.id_vendedor || !producto.nombre_producto || 
         producto.cantidad_dispo == null || 
         producto.precio == null || 
@@ -86,93 +96,71 @@ export class ProductosInicioComponent implements OnInit {
         !producto.fecha_publicacion || 
         !producto.categoria) {
         console.error('El producto tiene campos faltantes o indefinidos:', producto);
-        return; // Detener si hay campos faltantes
+        return; 
     }
 
-    // Crear el objeto del producto para el carrito
     const carritoItem = {
         id_producto: producto._id,
         id_vendedor: producto.id_vendedor,
         nombre_producto: producto.nombre_producto,
-        cantidad_dispo: producto.cantidad_dispo, // Inicializar con 1 al agregar
-        precio: Number(producto.precio), // Asegúrate de que sea un número
+        cantidad_dispo: 1,
+        precio: Number(producto.precio),
         descripcion: producto.descripcion,
-        fecha_publicacion: new Date(producto.fecha_publicacion), // Convertir a fecha
+        fecha_publicacion: new Date(producto.fecha_publicacion),
         categoria: producto.categoria,
-        imagen: producto.imagen_url || '' // Asignar imagen_url o cadena vacía si no existe
+        imagen: producto.imagen_url || ''
     };
 
-    console.log('Carrito Item a agregar:', carritoItem); // Verificar el objeto antes de enviarlo
-
-    // Obtener el carrito existente del usuario
-    this.carritoService.getCarritos().subscribe(carritos => {
+    this.carritoService.getCarritos().subscribe((carritos: any[]) => {
         const carritoExistente = carritos.find(carrito => carrito.id_usuario === 'usuario123');
 
         if (carritoExistente) {
-            // Comprobar si el producto ya existe en el carrito
-            const productoExistente = carritoExistente.productos.find(item => item.id_producto === carritoItem.id_producto);
-
+            const productoExistente = carritoExistente.productos.find((item: { id_producto: string; }) => item.id_producto === carritoItem.id_producto);
             if (productoExistente) {
-                // Si el producto ya está en el carrito, actualizar su cantidad
                 productoExistente.cantidad_dispo += carritoItem.cantidad_dispo;
-                console.log('Cantidad actualizada para el producto existente:', productoExistente);
             } else {
-                // Si el producto no existe, agregarlo al carrito
                 carritoExistente.productos.push(carritoItem);
-                console.log('Producto agregado al carrito existente:', carritoExistente.productos);
             }
 
-            // Actualizar el carrito existente
             this.carritoService.updateCarrito(carritoExistente).subscribe(
-                response => {
-                    console.log('Carrito actualizado con éxito', response);
+                () => {
                     this.mensaje = `${producto.nombre_producto} ha sido agregado al carrito.`;
-                    this.mostrarMensaje(); // Mostrar el mensaje
+                    this.mostrarMensaje();
                 },
-                error => {
+                (error: any) => {
                     console.error('Error al actualizar el carrito', error);
                 }
             );
         } else {
-            // Crear un nuevo carrito si no existe
-            const nuevoCarrito = new Carrito(
-                'usuario123',
-                'activo',
-                new Date(),
-                [carritoItem] // Agregar el nuevo producto
-            );
-
+            const nuevoCarrito = new Carrito('usuario123', 'activo', new Date(), [carritoItem]);
             this.carritoService.createCarrito(nuevoCarrito).subscribe(
-                response => {
-                    console.log('Carrito creado y producto agregado', response);
+                () => {
                     this.mensaje = `${producto.nombre_producto} ha sido agregado al carrito.`;
-                    this.mostrarMensaje(); // Mostrar el mensaje
+                    this.mostrarMensaje();
                 },
-                error => {
+                (error: any) => {
                     console.error('Error al crear el carrito', error);
                 }
             );
         }
-    }, error => {
+    }, (error: any) => {
         console.error('Error al obtener carritos:', error);
     });
   }
 
-  // Método para mostrar el mensaje y ocultarlo después de un tiempo
   mostrarMensaje() {
-    this.mensajeVisible = true; // Mostrar el mensaje
-
+    this.mensajeVisible = true;
     setTimeout(() => {
-      this.mensajeVisible = false; // Ocultar el mensaje después de 2 segundos
-      this.mensaje = null; // Limpiar el mensaje
-    }, 2000); // Duración del mensaje
+      this.mensajeVisible = false;
+      this.mensaje = null;
+    }, 2000);
   }
 
   irACarrito(): void {
-    this.router.navigate(['/carrito']); // Reemplaza '/ruta-del-carrito' con la ruta correspondiente
+    this.router.navigate(['/carrito']);
   }
 
-  navigateToFilter(categoria: string) {
+  navigateToFilter(categoria: string): void {
     this.router.navigate(['/productosF', categoria]);
   }
 }

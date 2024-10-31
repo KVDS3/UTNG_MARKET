@@ -3,7 +3,15 @@
     <div class="header-bar">
       <div class="location">Utng Market</div>
       <div class="container">
-        <input type="text" [(ngModel)]="query" (input)="filtrarProductos()" name="search" placeholder="Buscar un producto específico..." required class="search-input" />
+        <input
+          type="text"
+          [(ngModel)]="query"
+          (input)="filtrarProductos()"
+          name="search"
+          placeholder="Buscar un producto específico..."
+          required
+          class="search-input"
+        />
         <button type="submit" class="search-button">Buscar</button>
         <div class="carrito">
           <button class="carrito-button" (click)="irACarrito()">
@@ -28,34 +36,36 @@
   <div class="banner">
     <div class="banner-content"></div>
     <div class="banner-images">
-        <img src="https://lh5.googleusercontent.com/proxy/d-AAah5u7t2U19JMZ1x2sNSDiMRlOGCtX4fSnXC37SeO36p4IPo4sfEV0hEIsVdEaw5l9zUo8_JVHHIE3NJbugxSGl2_3p6R92kL9HvuyXcZRjZb" 
-             alt="Tecnologia y Accesorios" 
-             title="Tecnologia y Accesorios" 
-             (click)="navigateToFilter('Tecnologia y Accesorios')">
-             
-        <img src="https://regalosparacientificos.com/wp-content/uploads/2019/09/material-para-ir-a-la-universidad-1.jpg" 
-             alt="Material de Estudio y Papelería" 
-             title="Material de Estudio y Papelería" 
-             (click)="navigateToFilter('Material de Estudio y Papeleria')">
-             
-        <img src="https://teefactory.es/mds/publicitario/img/merchandising/comprar-merchandising-personalizado2.jpg" 
-             alt="Ropa y Merchandising Universitario" 
-             title="Ropa y Merchandising Universitario" 
-             (click)="navigateToFilter('Ropa y Merchandising universitario')">
-             
-        <img src="https://www.topkit.es/blog/wp-content/uploads/2015/09/muebles-oficina.jpg" 
-             alt="Mobiliario y Organización" 
-             title="Mobiliario y Organización" 
-             (click)="navigateToFilter('Mobiliario y Organizacion')">
+      <img
+        src="https://lh5.googleusercontent.com/proxy/d-AAah5u7t2U19JMZ1x2sNSDiMRlOGCtX4fSnXC37SeO36p4IPo4sfEV0hEIsVdEaw5l9zUo8_JVHHIE3NJbugxSGl2_3p6R92kL9HvuyXcZRjZb"
+        alt="Tecnologia y Accesorios"
+        title="Tecnologia y Accesorios"
+        (click)="navigateToFilter('Tecnologia y Accesorios')"
+      />
+      <img
+        src="https://regalosparacientificos.com/wp-content/uploads/2019/09/material-para-ir-a-la-universidad-1.jpg"
+        alt="Material de Estudio y Papelería"
+        title="Material de Estudio y Papelería"
+        (click)="navigateToFilter('Material de Estudio y Papeleria')"
+      />
+      <img
+        src="https://teefactory.es/mds/publicitario/img/merchandising/comprar-merchandising-personalizado2.jpg"
+        alt="Ropa y Merchandising Universitario"
+        title="Ropa y Merchandising Universitario"
+        (click)="navigateToFilter('Ropa y Merchandising universitario')"
+      />
+      <img
+        src="https://www.topkit.es/blog/wp-content/uploads/2015/09/muebles-oficina.jpg"
+        alt="Mobiliario y Organización"
+        title="Mobiliario y Organización"
+        (click)="navigateToFilter('Mobiliario y Organizacion')"
+      />
     </div>
-</div>
-
-   
+  </div>
 
   <div class="product-section">
-
     <ul class="product-list">
-      <li *ngFor="let producto of productos" class="product-item" (click)="openModal(producto)">
+      <li *ngFor="let producto of productosFiltrados" class="product-item" (click)="openModal(producto)">
         <img [src]="producto.imagen_url" [alt]="producto.nombre_producto" class="product-image" />
         <a class="product-name">{{ producto.nombre_producto }}</a>
         <div class="product-details">
@@ -85,10 +95,8 @@
       </div>
     </div>
   </div>
-  
 
   <div *ngIf="mensajeVisible" class="mensaje-eliminacion">
     {{ mensaje }}
   </div>
-  
 </body>
