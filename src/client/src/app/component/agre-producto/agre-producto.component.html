@@ -24,7 +24,13 @@
     </div>
     <div>
       <label for="categoria">Categoría:</label>
-      <input id="categoria" [(ngModel)]="producto.categoria" name="categoria" required />
+      <select id="categoria" [(ngModel)]="producto.categoria" name="categoria" required>
+        <option value="">Seleccione una categoría</option>
+        <option value="Tecnologia y Accesorios">Tecnologia y Accesorios</option>
+        <option value="Material de Estudio y Papeleria">Material de Estudio y Papeleria</option>
+        <option value="Ropa y Merchandising universitario">Ropa y Merchandising universitario</option>
+        <option value="Mobiliario y Organizacion">Mobiliario y Organizacion</option>
+      </select>
     </div>
 
     <!-- Campo para seleccionar imagen -->

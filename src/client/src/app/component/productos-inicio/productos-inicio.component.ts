@@ -18,8 +18,13 @@ export class ProductosInicioComponent implements OnInit {
   selectedProduct: Productos | null = null; // Variable para el producto seleccionado
   mensaje: string | null = null; // Mensaje de confirmación
   mensajeVisible: boolean = false; // Para controlar la visibilidad del mensaje
+  mostrarSugerencias: boolean = false; // Para mostrar las sugerencias
 
-  constructor(private productosService: ProductosService, private carritoService: CarritoService,private router: Router) { }
+  constructor(
+    private productosService: ProductosService,
+    private carritoService: CarritoService,
+    private router: Router
+  ) {}
 
   ngOnInit(): void {
     this.obtenerProductos();
@@ -46,9 +51,22 @@ export class ProductosInicioComponent implements OnInit {
       this.productosFiltrados = this.productos.filter(producto =>
         producto.nombre_producto.toLowerCase().includes(this.query.toLowerCase())
       );
+      this.mostrarSugerencias = this.productosFiltrados.length > 0; // Mostrar sugerencias si hay coincidencias
     } else {
       this.productosFiltrados = this.productos;
+      this.mostrarSugerencias = false; // Ocultar sugerencias si el campo está vacío
     }
+  }
+
+  seleccionarProducto(producto: Productos): void {
+    this.query = producto.nombre_producto; // Asigna el nombre del producto al campo de búsqueda
+    this.mostrarSugerencias = false; // Oculta las sugerencias
+  }
+  selectProducto(producto: Productos): void {
+    this.query = producto.nombre_producto; // Asigna el nombre del producto al campo de búsqueda
+    this.productosFiltrados = []; // Limpia las opciones después de seleccionar
+    // Aquí podrías añadir más lógica, como abrir un modal o navegar a la página del producto
+    this.openModal(producto); // Ejemplo: abrir el modal del producto seleccionado
   }
 
   openModal(product: Productos): void {
@@ -58,7 +76,7 @@ export class ProductosInicioComponent implements OnInit {
   closeModal() {
     this.selectedProduct = null; // Esto asegura que el modal se oculte
   }
-  
+
   agregarAlCarrito(producto: Productos): void {
     // Verificación de campos en el producto
     if (!producto._id || !producto.id_vendedor || !producto.nombre_producto || 
@@ -149,7 +167,12 @@ export class ProductosInicioComponent implements OnInit {
       this.mensaje = null; // Limpiar el mensaje
     }, 2000); // Duración del mensaje
   }
+
   irACarrito(): void {
     this.router.navigate(['/carrito']); // Reemplaza '/ruta-del-carrito' con la ruta correspondiente
+  }
+
+  navigateToFilter(categoria: string) {
+    this.router.navigate(['/productosF', categoria]);
   }
 }
