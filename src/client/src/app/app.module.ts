@@ -18,6 +18,7 @@ import { ProductosFiltroComponent } from './component/productos-filtro/productos
 
 @NgModule({
   declarations: [
+    
     CarritoComponent,
     HomeComponent,
     UsuariosComponent,
@@ -26,10 +27,9 @@ import { ProductosFiltroComponent } from './component/productos-filtro/productos
     FormaPagoComponent,
     ConfirmPagoComponent,
     AgreDireccionComponent,
-    ProductosInicioComponent,
+
     ProductosFiltroComponent,
-    
-    
+ProductosInicioComponent    
   ],
   imports: [
     BrowserModule,

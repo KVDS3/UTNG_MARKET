@@ -64,7 +64,6 @@ export class ConfirmPagoComponent implements OnInit {
     );
   }
   confirmarCompra() {
-    // Lógica adicional si es necesario
-    this.router.navigate(['/compra']); // Redirige a la pantalla de compra
+    this.router.navigate(['/formaPagos']); // Redirige a la pantalla de compra
   }
 }
