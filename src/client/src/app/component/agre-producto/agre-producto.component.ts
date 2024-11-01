@@ -1,20 +1,20 @@
+import { CarritoService } from './../../services/carrito.service';
 import { Component, OnInit } from '@angular/core';
 import { ProductosService } from '../../services/agre-producto.service';
-import { CarritoService } from '../../services/carrito.service';
 import { Productos } from '../../models/productos';
 import { HttpClient } from '@angular/common/http';
 import { Carrito } from '../../models/carrito';
 import { jwtDecode } from 'jwt-decode';
-import { ProductosService } from '../../services/agre-producto.service'; // Importa tu servicio
-import { Productos } from '../../models/productos'; // Modelo de producto
+
 @Component({
   selector: 'app-agre-producto',
   templateUrl: './agre-producto.component.html',
-  styleUrl: './agre-producto.component.css'
+  styleUrls: ['./agre-producto.component.css']
 })
 export class AgreProductoComponent implements OnInit {
   productos: Productos[] = [];
-  producto: Productos = new Productos('', '', 0, 0, '', new Date(), ''); // Producto inicial vacío
+  productosfiltered: Productos[] = [];
+  producto: Productos = new Productos('', '', 0, 0, '', new Date(), '');
   editando: boolean = false;
   selectedFile: File | null = null;  
   previewUrl: string | ArrayBuffer | null = null;
@@ -23,7 +23,7 @@ export class AgreProductoComponent implements OnInit {
   id_vendedor:string='';
   token: string | null ='';
 
-  constructor(private productosService: ProductosService) {}
+  constructor(private productosService: ProductosService, private carritoService: CarritoService, private http: HttpClient) {}
 
   ngOnInit(): void {
     this.listarProductos();
@@ -35,27 +35,55 @@ export class AgreProductoComponent implements OnInit {
       this.vendedor = decodedToken.username; // Asume que el campo vendedor está en el token
       console.log(this.vendedor); // Opcional: Verifica los datos decodificados
     }
+    
   }
 
-  // Obtener todos los productos
   listarProductos(): void {
-    this.productosService.getProductos().subscribe((data: Productos[]) => {
-      this.productos = data;
-    });
+    this.productosService.getProductosByVendedor(this.id_vendedor).subscribe(
+      (data: Productos[]) => {
+        this.productos = data.map(producto => ({
+          ...producto,
+          imagen_url: `http://localhost:3000${producto.imagen_url}`
+        }));
+        console.log(this.productos);
+        this.mostrarProductosDisponibles();
+      },
+      error => {
+        console.error('Error al obtener productos', error);
+      }
+    );
   }
 
-  // Crear o actualizar un producto
-  onSubmit(): void {
-    if (this.editando) {
-      this.productosService.updateProducto(this.producto).subscribe(() => {
-        this.listarProductos();
-        this.resetForm();
-      });
+  onFileSelected(event: any): void {
+    this.selectedFile = event.target.files[0];
+
+    if (this.selectedFile) {
+      this.handleFile(this.selectedFile);
     } else {
-      this.productosService.createProducto(this.producto).subscribe(() => {
-        this.listarProductos();
-        this.resetForm();
-      });
+      this.previewUrl = null;
+    }
+  }
+
+  resetFileInput(): void {
+    const fileInput: HTMLInputElement = document.getElementById('imagen') as HTMLInputElement;
+    if (fileInput) {
+      fileInput.value = '';
+    }
+  }
+
+  onSubmit(): void {
+    // Validar que los campos obligatorios estén llenos
+    if (
+        !this.producto.nombre_producto || 
+        !this.producto.cantidad_dispo || 
+        !this.producto.categoria || 
+        !this.producto.precio || 
+        !this.selectedFile // Agregamos la validación para el archivo de imagen
+    ) {
+        this.errorMessage = 'Por favor, complete todos los campos obligatorios, incluyendo la imagen.';
+        return; // Detener la ejecución si hay campos vacíos
+    } else {
+        this.errorMessage = null; // Limpiar el mensaje de error si todo está correcto
     }
     console.log(this.id_vendedor)
 
@@ -99,30 +127,20 @@ export class AgreProductoComponent implements OnInit {
       );
     }
 }
-  }
 
-  // Editar producto
-  editarProducto(producto: Productos): void {
-    this.producto = { ...producto }; // Clonar para editar sin modificar directamente la lista
-    this.editando = true;
-  }
 
-  // Eliminar producto
-  eliminarProducto(_id: string | undefined): void {
-    this.productosService.deleteProducto(_id!).subscribe(() => {
-      this.listarProductos();
-    });
-  }
-
-  // Limpiar el formulario
   resetForm(): void {
     this.producto = new Productos('', '', 0, 0, '', new Date(), '');
     this.editando = false;
+    this.selectedFile = null;
+    this.previewUrl = null;
+    this.resetFileInput();
   }
 
   editarProducto(producto: Productos): void {
     this.producto = { ...producto };
     this.editando = true;
+    this.isFormVisible=true;
     this.previewUrl = producto.imagen_url || null;
   }
 
@@ -148,9 +166,9 @@ export class AgreProductoComponent implements OnInit {
   
   onDrop(event: DragEvent) {
     event.preventDefault();
-    const file = event.dataTransfer?.files[0];
-    if (file && file.type.startsWith('image/')) {
-      this.handleFile(file);
+    this.selectedFile = event.dataTransfer?.files[0] as File;
+    if (this.selectedFile && this.selectedFile.type.startsWith('image/')) {
+      this.handleFile(this.selectedFile);
     }
   }
   
@@ -162,3 +180,23 @@ export class AgreProductoComponent implements OnInit {
     reader.readAsDataURL(file);
   }
   
+  isFormVisible: boolean = false;
+
+  mostrarFormulario(): void {
+    this.isFormVisible = true; // Muestra el formulario
+    this.editando = false; // Asegúrate de que no esté en modo edición
+  }
+
+  cerrarFormulario() {
+    this.isFormVisible = false;
+  }
+
+  mostrarProductosDisponibles() {
+    this.productosfiltered = this.productos.filter(p => p.cantidad_dispo > 0);
+  }
+
+  mostrarProductosVendidos() {
+    this.productosfiltered = this.productos.filter(p => p.cantidad_dispo === 0);
+  }
+  
+}

@@ -1,61 +1,185 @@
-body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-    background-color: #f4f4f4;
-}
-
+/* Contenedor principal */
 .container {
-    width: 80%;
-    margin: 20px auto;
-    background-color: #fff;
+    max-width: 1200px;
+    margin: 0 auto;
     padding: 20px;
-    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    font-family: Arial, sans-serif;
 }
 
-.cart-item {
+h1 {
+    font-family: 'Roboto', sans-serif;
+    font-size: 32px;
+    color: #333;
+    text-align: center;
+    font-weight: 700;
+    margin-bottom: 30px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    background: linear-gradient(90deg, #000000, #00a4e4); /* Degradado de PayPal */
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+/* Contenedor del carrito */
+.cart-container {
     display: flex;
     justify-content: space-between;
+    align-items: flex-start;
+    gap: 20px;
+}
+
+/* Contenedor de items */
+.cart-items {
+    flex: 3;
+}
+
+/* Estilo del item individual */
+.cart-item {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 15px;
+    border: 1px solid #e6e6e6;
     margin-bottom: 15px;
-    padding: 10px;
-    border-bottom: 1px solid #ccc;
+    border-radius: 8px;
+    background-color: #f9f9f9;
 }
 
-.cart-item:last-child {
-    border-bottom: none;
-}
-
+/* Imagen del producto */
 .cart-item img {
+    border-radius: 5px;
     width: 100px;
-    height: auto;
-    margin-right: 20px;
 }
 
+/* Detalles del producto */
 .cart-details {
+    display: flex;
+    flex-direction: column;
     flex: 1;
 }
 
-.cart-total {
-    text-align: right;
-    margin-top: 20px;
+/* Nombre y precio */
+.product-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.product-name {
+    font-weight: bold;
+    color: #333;
+}
+
+.product-price {
+    font-size: 1.2em;
+    color: #333;
+    margin-left: auto;
+}
+
+/* Control de cantidad */
+.quantity-control {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.btn-decrement,
+.btn-increment {
+    width: 30px;
+    height: 30px;
+    border: none;
+    background-color: #ccc;
+    color: #333;
+    font-size: 1em;
+    cursor: pointer;
+    border-radius: 50%;
+}
+
+.quantity-input {
+    width: 50px;
+    text-align: center;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+/* Resumen del carrito */
+.cart-summary {
+    flex: 1;
+    border: 1px solid #e6e6e6;
+    padding: 20px;
+    border-radius: 8px;
+    background-color: #fdfdfd;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.cart-total p {
     font-size: 1.5em;
     font-weight: bold;
+    color: #333;
 }
 
-.cart-actions {
-    text-align: right;
-    margin-top: 20px;
-}
-
-.btn {
-    padding: 10px 20px;
-    background-color: #28a745;
-    color: white;
+/* Botón de compra */
+.cart-actions .btn {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    font-size: 1.2em;
+    background-color: #007bff; /* Azul */
+    color: #fff;
     border: none;
+    border-radius: 8px;
     cursor: pointer;
-    text-transform: uppercase;
+    margin-top: 15px;
 }
 
-.btn:hover {
-    background-color: #218838;
+.cart-actions .btn:hover {
+    background-color: #0056b3; /* Azul más oscuro para hover */
 }
+.btn-remove {
+    margin-left: 10px; /* Espacio a la izquierda */
+    color: rgb(0, 0, 0); /* Color de texto blanco */
+    border: none; /* Sin borde */
+    padding: 5px 10px; /* Espaciado */
+    cursor: pointer; /* Cursor de mano */
+}
+.mensaje-eliminacion {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(0, 0, 0, 0.8); /* Fondo semitransparente */
+    color: #fff;
+    font-size: 2em;
+    z-index: 1000;
+    opacity: 0;
+    animation: fadeInOut 2s ease forwards;
+}
+
+@keyframes fadeInOut {
+    0% { opacity: 0; }
+    20%, 80% { opacity: 1; }
+    100% { opacity: 0; }
+}
+
+/* Estilo para el botón de carga */
+.spinner {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    border: 3px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    border-top-color: #ffffff;
+    animation: spin 0.6s linear infinite;
+  }
+  
+  @keyframes spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+  

@@ -1,14 +1,13 @@
+import { Usuarios } from './../models/usuarios';
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { Usuarios } from '../models/usuarios';
 
 @Injectable({
   providedIn: 'root'
 })
 export class UsuariosService {
   private apiUrl = 'http://localhost:3001/usuarios'; // Cambia la URL a la correcta
-  private apiUrl = 'http://localhost:3000/api/usuarios'; // Cambia la URL a la correcta
 
   constructor(private http: HttpClient) { }
 
@@ -18,8 +17,12 @@ export class UsuariosService {
   }
 
   // Agregar un nuevo usuario
-  addUsuario(usuario: Usuarios): Observable<Usuarios> {
+  addUsuario(usuario: any): Observable<Usuarios> {
     return this.http.post<Usuarios>(this.apiUrl, usuario);
+  }
+
+  logInUser(usuario:any):Observable<any>{
+    return this.http.post<any>(this.apiUrl+'/login', usuario);
   }
 
   // Actualizar un usuario existente

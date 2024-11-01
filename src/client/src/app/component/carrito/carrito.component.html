@@ -1,29 +1,46 @@
+<div class="container">
+    <h1>Tu Carrito</h1>
 
-
-    <div class="container">
-        <h1>Tu Carrito</h1>
-        
-        <!-- Productos en el carrito -->
-        <div class="cart-item">
-            <img alt="Producto 1">
-            <div class="cart-details">
-                <tr>
-                  <td></td>  
-                </tr>
+    <div class="cart-container">
+        <div class="cart-items">
+            <!-- Productos a la izquierda -->
+            <div class="cart-item" *ngFor="let producto of carrito?.productos">
+                <img [src]="producto.imagen" alt="Producto" width="100">
+                <div class="cart-details">
+                    <div class="product-info">
+                        <p class="product-name">{{ producto.nombre_producto }}</p> <!-- Nombre en negrita -->
+                    </div>
+                    <p class="product-price">${{ producto.precio }}</p> <!-- Precio a la derecha -->
+                    <!-- Botones de incremento/decremento y eliminar -->
+                    <div class="quantity-control">
+                        <button class="btn-decrement" (click)="decrementar(producto.id_producto)">-</button>
+                        <input type="number" [value]="cantidadSeleccionada[producto.id_producto]" class="quantity-input" readonly>
+                        <button class="btn-increment" (click)="incrementar(producto.id_producto)">+</button>
+                        <button class="btn-remove" (click)="eliminarProducto(producto.id_producto)">Eliminar</button>
+                    </div>
+                    <!-- Cantidad disponible -->
+                    <p class="available-quantity">Cantidad disponible: {{ producto.cantidad_dispo }}</p>
+                </div>
             </div>
         </div>
-
-
-        <!-- Total -->
-        <div class="cart-total">
-            Total: $50.00
-        </div>
-
-        <!-- Botón de acciones -->
-        <div class="cart-actions">
-            <button class="btn">Proceder al Pago</button>
+        
+          <!-- Resto de tu código HTML para el carrito -->
+          
+        <!-- Suma total y botón de compra a la derecha -->
+        <div class="cart-summary">
+            <div class="cart-total">
+                <p>Total: {{ total | currency }}</p>
+            </div>
+            <div *ngIf="mensajeEliminacion" @fadeInOut class="mensaje-eliminacion">
+                Producto eliminado del carrito correctamente.
+              </div>
+              <div class="cart-actions">
+                <button class="btn" (click)="procederAlPago()" [disabled]="cargando">
+                    <!-- Muestra el spinner cuando cargando es verdadero -->
+                    <span *ngIf="!cargando">Proceder al Pago</span>
+                    <span *ngIf="cargando" class="spinner"></span> <!-- Spinner -->
+                </button>
+            </div>
         </div>
     </div>
-
-
-
+</div>
